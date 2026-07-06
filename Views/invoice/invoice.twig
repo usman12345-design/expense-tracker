@@ -1,0 +1,34 @@
+<h2>Paid Invoices Dashboard</h2>
+
+{% if invoices is empty %}
+    <p>No paid invoices found in the system ledger storage matching parameters.</p>
+{% else %}
+    <table>
+        <thead>
+        <tr>
+            <th>Invoice ID</th>
+            <th>Invoice Number</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+            <tr>
+                {# Using array keys via dot notation, automatically escaped #}
+                <td><strong>#{{ invoice.id }}</strong></td>
+                <td>{{ invoice.invoiceNumber }}</td>
+                <td>${{ invoice.amount|number_format(2, '.', ',') }}</td>
+                <td>
+                    <span class="status-badge">
+                        {# Assuming the status value is now a string key in your array #}
+                        {{ invoice.status.toString}}
+                    </span>
+                </td>
+                <td>{{ invoice.createdAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
