@@ -6,5 +6,4 @@ use App\Controllers\InvoiceController;
 
 return function (App $app) {
     $app->get('/',[HomeController::class,'index']);
-    $app->get('/invoice',[InvoiceController::class,'index']);
 };

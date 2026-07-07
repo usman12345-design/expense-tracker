@@ -1,30 +1,30 @@
 <?php
+declare(strict_types=1);
 namespace App;
 
 class Config
 {
-    public array $config;
-
-    public function __construct()
+    public function __construct(private readonly array $config)
     {
-        $this->config = [
-            'db' => [
-             'dbname' => $_ENV['DB_DATABASE'],
-             'user' => $_ENV['DB_USER'],
-             'password' => $_ENV['DB_PASS'],
-             'host' => $_ENV['DB_HOST'],
-             'driver' => $_ENV['DB_DRIVER']
-             ],
-             'environment' => $_ENV['APP_ENVIRONMENT'] ?? 'production',
-            'Mailer' => [
-                'dsn' => $_ENV['MAILER_DSN'] ?? []
-            ]
-        ];
-
     }
 
-    public function __get($name)
+    public function get(string $name, mixed $default = null): mixed
     {
-        return $this->config[$name] ?? null;
+        $path = explode('.', $name);
+        $value = $this->config[array_shift($path)] ?? null;
+
+        if ($value === null) {
+            return $default;
+        }
+
+        foreach ($path as $key) {
+            if (!isset($value[$key])) {
+                return $default;
+            }
+
+            $value = $value[$key];
+        }
+
+        return $value;
     }
 }

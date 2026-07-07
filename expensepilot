@@ -16,14 +16,10 @@ $entityManager = $container->get(EntityManager::class);
 $config = new PhpFile(CONFIG_PATH.'/migrations.php');
 $dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingEntityManager($entityManager));
 
-$migrationCommands = require __DIR__ . '/Configs/migration_commands.php';
-$customCommands = require __DIR__ . '/Configs/custom_commands.php';
-$commands = [
+$migrationCommands = require __DIR__ . '/Configs/command/migration_commands.php';
+$customCommands = require __DIR__ . '/Configs/command/custom_commands.php';
 
-    new \App\Commands\MyCommands()
-];
-
-$cli = new Application('App', '1.0');
+$cli = new Application('expensepilot', '1.0');
 
 ConsoleRunner::addCommands($cli, new SingleManagerProvider($entityManager));
 $cli->addCommands(array_map(fn($command) => $container->get($command), $customCommands));
