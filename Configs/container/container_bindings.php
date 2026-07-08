@@ -13,6 +13,15 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Twig\Extra\Intl\IntlExtension;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
+use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
+use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
+use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use function DI\create;
 
 return [
@@ -64,7 +73,25 @@ return [
         ]);
 
         $twig->addExtension(new IntlExtension());
+        $twig->addExtension(new EntryFilesTwigExtension($container));
+        $twig->addExtension(new AssetExtension($container->get('webpack_encore.packages')));
         return $twig;
     },
+
+    /**
+     * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
+     */
+    'webpack_encore.packages'     => fn() => new Packages(
+        new Package(new JsonManifestVersionStrategy(BUILD_PATH . '/manifest.json'))
+    ),
+    'webpack_encore.entrypoint_lookup_collection' => fn() => new EntrypointLookupCollection(
+        new ServiceLocator([
+            '_default' => fn() => new EntrypointLookup(BUILD_PATH . '/entrypoints.json'),
+        ])
+    ),
+    'webpack_encore.tag_renderer' => fn(ContainerInterface $container) => new TagRenderer(
+        $container->get('webpack_encore.entrypoint_lookup_collection'),
+        $container->get('webpack_encore.packages')
+    ),
 
 ];

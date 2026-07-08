@@ -1,0 +1,23 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.86301660.js",
+        "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
+        "/build/app.fa06ed20.js"
+      ],
+      "css": [
+        "/build/app.c89a9e96.css"
+      ]
+    },
+    "dashboard": {
+      "js": [
+        "/build/runtime.86301660.js",
+        "/build/dashboard.7470f771.js"
+      ],
+      "css": [
+        "/build/dashboard.a31c809b.css"
+      ]
+    }
+  }
+}
