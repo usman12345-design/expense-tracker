@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Doctrine\Migrations\Tools\Console\Command\DiffCommand;
 use Doctrine\Migrations\Tools\Console\Command\CurrentCommand;
 use Doctrine\Migrations\Tools\Console\Command\DumpSchemaCommand;
 use Doctrine\Migrations\Tools\Console\Command\ExecuteCommand;
@@ -16,6 +17,7 @@ use Doctrine\Migrations\Tools\Console\Command\SyncMetadataCommand;
 use Doctrine\Migrations\Tools\Console\Command\ListCommand;
 
 return fn(\Doctrine\Migrations\DependencyFactory $dependencyFactory) => [
+    new DiffCommand($dependencyFactory),
     new CurrentCommand($dependencyFactory),
     new DumpSchemaCommand($dependencyFactory),
     new ExecuteCommand($dependencyFactory),
