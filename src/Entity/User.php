@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'users')]
+#[ORM\HasLifecycleCallbacks]
 class User
 {
     #[ORM\Id]
@@ -19,6 +20,10 @@ class User
     private string $password;
     #[ORM\Column(length: 255)]
     private string $name;
+    #[ORM\Column(name: 'created_at')]
+    private \DateTime $createdAt;
+    #[ORM\Column(name: 'updated_at')]
+    private \DateTime $updatedAt;
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'users', cascade: ['persist', 'remove'])]
     private Collection $categories;
     #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'users', cascade: ['persist', 'remove'])]
@@ -28,6 +33,17 @@ class User
     {
         $this->categories = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateTimestamp(): void
+    {
+        // If createdAt isn't set yet (or is null), set it now
+        if (! isset($this->createdAt) || $this->createdAt === null) {
+            $this->createdAt = new \DateTime(); // Using Immutable is recommended for modern Doctrine
+        }
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): int

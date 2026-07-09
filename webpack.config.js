@@ -12,6 +12,7 @@ Encore
 
     // public path used by the web server to access the output path
     .setPublicPath("/build")
+    .addEntry("auth", "./resources/js/auth.js")
 
     /*
      * ENTRY CONFIG

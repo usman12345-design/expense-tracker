@@ -9,10 +9,13 @@ services:
        - PHP_IDE_CONFIG=serverName=localhost
     restart: unless-stopped
     working_dir: /var/www
+    ports:
+      - "9003:9003"
     volumes:
       - .:/var/www
       - vendor_data:/var/www/vendor
       - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./local.ini:/usr/local/etc/php/conf.d/local.ini
     depends_on:
       - db
     networks:
