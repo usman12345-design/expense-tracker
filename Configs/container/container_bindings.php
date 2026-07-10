@@ -23,6 +23,7 @@ use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use function DI\create;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
 
@@ -77,6 +78,8 @@ return [
         $twig->addExtension(new AssetExtension($container->get('webpack_encore.packages')));
         return $twig;
     },
+
+    ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
 
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
