@@ -10,6 +10,9 @@ return function (App $app) {
     $config = $container->get(Config::class);
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
     $app->add(\App\Middleware\ValidationExceptionMiddleware::class);
+    $app->add(\App\Middleware\ValidationErrorsMiddleware::class);
+    $app->add(\App\Middleware\StartSessionsMiddleware::class);
+
     $app->addErrorMiddleware(
         (bool) $config->get('display_error_details'),
         (bool) $config->get('log_errors'),
