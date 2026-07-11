@@ -68,8 +68,6 @@ class __TwigTemplate_4dc60bbd970e3ed7f462150341edebf4 extends Template
     {
         $macros = $this->macros;
         // line 5
-        yield "    ";
-        yield (string) $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(json_encode(($context["old"] ?? null)), "html", null, true);
         yield "
     <section class=\"vh-100 bg-primary bg-gradient\">
         <div class=\"container py-5 h-100\">
@@ -192,7 +190,7 @@ class __TwigTemplate_4dc60bbd970e3ed7f462150341edebf4 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  150 => 50,  144 => 47,  136 => 42,  130 => 39,  122 => 34,  116 => 31,  112 => 30,  104 => 25,  98 => 22,  94 => 21,  84 => 14,  71 => 5,  64 => 4,  53 => 3,  42 => 1,);
+        return array (  148 => 50,  142 => 47,  134 => 42,  128 => 39,  120 => 34,  114 => 31,  110 => 30,  102 => 25,  96 => 22,  92 => 21,  82 => 14,  71 => 5,  64 => 4,  53 => 3,  42 => 1,);
     }
 
     public function getSourceContext(): Source
