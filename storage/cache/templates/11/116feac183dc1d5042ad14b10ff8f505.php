@@ -85,12 +85,35 @@ class __TwigTemplate_84096f328653bf97a3b713f36d53fdb3 extends Template
                                 </h2>
                                 <form method=\"post\" action=\"/login\">
                                     <div class=\"form-outline form-white mb-4\">
-                                        <input type=\"email\" class=\"form-control form-control-lg\" placeholder=\"Email\"
+                                        <input type=\"email\" name=\"email\" class=\"form-control form-control-lg ";
+        // line 20
+        yield (string) (((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "email", [], "any", false, false, false, 20)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("is-invalid") : (""));
+        yield "\"
+                                               value=\"";
+        // line 21
+        yield (string) $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["old"] ?? null), "email", [], "any", false, false, false, 21), "html", null, true);
+        yield "\"
+                                               placeholder=\"Email\"
                                                required />
+                                        <div class=\"invalid-feedback\">
+                                            ";
+        // line 25
+        yield (string) $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::first($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "email", [], "any", false, false, false, 25)), "html", null, true);
+        yield "
+                                        </div>
                                     </div>
                                     <div class=\"form-outline form-white mb-1\">
-                                        <input type=\"password\" class=\"form-control form-control-lg\"
+                                        <input type=\"password\" name=\"password\" class=\"form-control form-control-lg ";
+        // line 29
+        yield (string) (((($tmp = CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "password", [], "any", false, false, false, 29)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("is-invalid") : (""));
+        yield "\"
                                                placeholder=\"Password\" required />
+                                        <div class=\"invalid-feedback\">
+                                            ";
+        // line 32
+        yield (string) $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::first($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["errors"] ?? null), "password", [], "any", false, false, false, 32)), "html", null, true);
+        yield "
+                                        </div>
                                     </div>
                                     <p class=\"mb-4 text-end\"><a class=\"text-secondary fw-semibold\" href=\"#\">Forgot
                                             password?</a></p>
@@ -135,7 +158,7 @@ class __TwigTemplate_84096f328653bf97a3b713f36d53fdb3 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  81 => 14,  71 => 6,  64 => 5,  53 => 3,  42 => 1,);
+        return array (  114 => 32,  108 => 29,  101 => 25,  94 => 21,  90 => 20,  81 => 14,  71 => 6,  64 => 5,  53 => 3,  42 => 1,);
     }
 
     public function getSourceContext(): Source
