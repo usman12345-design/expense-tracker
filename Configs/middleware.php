@@ -1,7 +1,6 @@
 <?php
 
 use App\Config;
-use App\Middleware\AuthenticateMiddleware;
 use App\Middleware\OldFormDataMiddleware;
 use App\Middleware\StartSessionsMiddleware;
 use App\Middleware\ValidationErrorsMiddleware;
@@ -13,7 +12,7 @@ use Slim\Views\TwigMiddleware;
 return function (App $app) {
     $container = $app->getContainer();
     $config = $container->get(Config::class);
-    $app->add(AuthenticateMiddleware::class);
+
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
     $app->add(ValidationExceptionMiddleware::class);
     $app->add(ValidationErrorsMiddleware::class);
