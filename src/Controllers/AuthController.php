@@ -42,13 +42,11 @@ class AuthController
             'email'
         )->message('User with the given email address already exists');
 
-        if ($v->validate()) {
-            echo "Yay! We're all good!";
-        } else {
+        if (!$v->validate()) {
             throw new ValidationException($v->errors());
             //var_dump($v->errors());
         }
-        exit;
+
         $user = new User();
 
         $user->setName($data['name']);
@@ -79,8 +77,7 @@ class AuthController
 
     public function logOut(Request $request, Response $response): Response
     {
-        // TODO
-
+        $this->auth->logOut();
         return $response->withHeader('Location', '/')->withStatus(302);
     }
 

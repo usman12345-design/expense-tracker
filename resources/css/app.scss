@@ -22,3 +22,13 @@ body {
     color: #57585A !important;
   }
 }
+
+
+.dropdown-menu {
+  &.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
+  }
+}

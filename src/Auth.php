@@ -53,5 +53,11 @@ class Auth implements AuthInterface
     {
         return password_verify($data['password'], $user->getPassword());
     }
+    public function logOut(): void
+    {
+        unset($_SESSION['user']);
+
+        $this->user = null;
+    }
 
 }

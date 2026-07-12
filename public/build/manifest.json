@@ -1,11 +1,10 @@
 {
   "build/auth.css": "/build/auth.0e96676f.css",
-  "build/auth.js": "/build/auth.93fdc691.js",
-  "build/app.css": "/build/app.c89a9e96.css",
-  "build/app.js": "/build/app.fa06ed20.js",
+  "build/auth.js": "/build/auth.6be03d4a.js",
+  "build/app.css": "/build/app.14f99ea7.css",
+  "build/app.js": "/build/app.d691cce1.js",
   "build/dashboard.css": "/build/dashboard.a31c809b.css",
-  "build/dashboard.js": "/build/dashboard.7470f771.js",
-  "build/runtime.js": "/build/runtime.98b9d781.js",
+  "build/dashboard.js": "/build/dashboard.c2103f7a.js",
   "build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js": "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
   "build/images/logo.png": "/build/images/logo.d391a209.png"
 }

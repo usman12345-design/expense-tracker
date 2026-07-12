@@ -1,3 +1,5 @@
-import "../css/app.scss"
+import "../css/app.scss";
 
-require('bootstrap')
+// 💡 Explicitly import Popper and Bootstrap together
+import '@popperjs/core';
+import 'bootstrap';
