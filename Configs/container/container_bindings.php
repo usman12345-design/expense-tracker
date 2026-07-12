@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Auth;
 use App\Config;
+use App\Contracts\AuthInterface;
 use App\Enums\AppEnvironment;
 use DI\create;
 use Doctrine\DBAL\DriverManager;
@@ -80,6 +82,7 @@ return [
     },
 
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
+    AuthInterface::class                => fn(ContainerInterface $container) => $container->get(Auth::class),
 
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
