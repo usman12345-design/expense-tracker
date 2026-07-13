@@ -49,18 +49,17 @@ class Auth implements AuthInterface
         }
 
         //session_regenerate_id();
-       // $_SESSION['user'] = $user->getId();
-
-        $this->session->regenerate();
-        $this->session->put('user', $user->getId());
-
-        $this->user = $user;
+       // $_SESSION['user'] = $user->getId();  then
+       // $this->session->regenerate();
+        //$this->session->put('user', $user->getId());
+        //$this->user = $user; then
+        $this->logIn($user);
 
         return true;
     }
-    public function checkCredentials(UserInterface $user, array $data): bool
+    public function checkCredentials(UserInterface $user, array $credentials): bool
     {
-        return password_verify($data['password'], $user->getPassword());
+        return password_verify($credentials['password'], $user->getPassword());
     }
     public function logOut(): void
     {
@@ -72,4 +71,18 @@ class Auth implements AuthInterface
         $this->user = null;
     }
 
+    public function register(array $data): UserInterface
+    {
+     $user = $this->userProvider->createUser($data);
+
+        $this->logIn($user);
+        return $user;
+    }
+    public function logIn(UserInterface $user): void
+    {
+        $this->session->regenerate();
+        $this->session->put('user', $user->getId());
+
+        $this->user = $user;
+    }
 }

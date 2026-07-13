@@ -12,8 +12,10 @@ use App\Exception\ValidationException;
 use Valitron\Validator;
 class AuthController
 {
-    public function __construct(private readonly Twig $twig, private readonly EntityManager $entityManager,private  readonly AuthInterface $auth)
-    {
+    public function __construct(private readonly Twig $twig,
+                                private readonly EntityManager $entityManager,
+                                private  readonly AuthInterface $auth
+    ){
     }
 
     public function loginView(Request $request, Response $response): Response
@@ -47,16 +49,9 @@ class AuthController
             //var_dump($v->errors());
         }
 
-        $user = new User();
+        $this->auth->register($data);
+        return $response->withHeader('Location', '/')->withStatus(302);
 
-        $user->setName($data['name']);
-        $user->setEmail($data['email']);
-        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        return $response;
     }
 
     public function logIn(Request $request, Response $response): Response

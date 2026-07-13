@@ -8,5 +8,6 @@ interface AuthInterface
     public function attemptLogin(array $data ): bool;
     public function checkCredentials(UserInterface $user, array $credentials): bool;
     public function logOut(): void;
-
+    public function register(array $data): UserInterface;
+    public function logIn(UserInterface $user): void;
 }
