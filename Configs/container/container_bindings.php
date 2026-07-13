@@ -5,11 +5,13 @@ declare(strict_types=1);
 use App\Auth;
 use App\Config;
 use App\Contracts\AuthInterface;
+use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\SessionInterface;
 use App\Contracts\UserProviderServiceInterface;
 use App\DataObjects\SessionConfig;
 use App\Enums\AppEnvironment;
 use App\Enums\SameSite;
+use App\RequestValidator\RequestValidatorFactory;
 use App\Services\UserProviderService;
 use App\Session;
 use DI\create;
@@ -100,6 +102,9 @@ return [
             $config->get('session.httponly', true),
             SameSite::from($config->get('session.samesite', 'lax'))
         )
+    ),
+    RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(
+        RequestValidatorFactory::class
     ),
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
