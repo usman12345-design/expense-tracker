@@ -4,6 +4,7 @@ namespace App;
 use App\Contracts\AuthInterface;
 use App\Contracts\SessionInterface;
 use App\Contracts\UserInterface;
+use App\DataObjects\RegisterUserData;
 use App\Entity\User;
 use App\Contracts\UserProviderServiceInterface;
 use App\Services\UserProviderService;
@@ -71,7 +72,7 @@ class Auth implements AuthInterface
         $this->user = null;
     }
 
-    public function register(array $data): UserInterface
+    public function register(RegisterUserData $data): UserInterface
     {
      $user = $this->userProvider->createUser($data);
 

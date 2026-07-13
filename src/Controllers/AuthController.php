@@ -10,6 +10,8 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use App\Exception\ValidationException;
 use Valitron\Validator;
+use App\DataObjects\RegisterUserData;
+
 class AuthController
 {
     public function __construct(private readonly Twig $twig,
@@ -49,7 +51,10 @@ class AuthController
             //var_dump($v->errors());
         }
 
-        $this->auth->register($data);
+
+        $this->auth->register(
+            new RegisterUserData($data['name'], $data['email'], $data['password'])
+        );
         return $response->withHeader('Location', '/')->withStatus(302);
 
     }
