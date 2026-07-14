@@ -16,6 +16,12 @@
                                     Login
                                 </h2>
                                 <form method="post" action="/login">
+                                    {{ csrf.fields | raw }}
+                                    {% if errors.general is defined %}
+                                        <div style="background:red;color:white;padding:10px;">
+                                            {{ errors.general | first }}
+                                        </div>
+                                    {% endif %}
                                     <div class="form-outline form-white mb-4">
                                         <input type="email" name="email" class="form-control form-control-lg {{ errors.email ? 'is-invalid' : '' }}"
                                                value="{{ old.email }}"

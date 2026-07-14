@@ -14,6 +14,11 @@
 
 <body>
 <div class="container">
+    {% if errors.general is defined %}
+        <div style="background:red;color:white;padding:10px;">
+            {{ errors.general | first }}
+        </div>
+    {% endif %}
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
             <img src="{{ asset('build/images/logo.png') }}" width="64" height="64" alt="Expennies Logo" />
@@ -41,6 +46,7 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropDownMenu" style="top: 100%; right: 0;">
                     <li>
                         <form action="/logout" method="post" class="m-0">
+                            {{ csrf.fields | raw }}
                             <button type="submit" class="dropdown-item">Log Out</button>
                         </form>
                     </li>

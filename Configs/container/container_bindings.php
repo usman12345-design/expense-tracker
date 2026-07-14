@@ -34,6 +34,7 @@ use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use function DI\create;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\Csrf\Guard;
 
 return [
 
@@ -106,6 +107,16 @@ return [
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(
         RequestValidatorFactory::class
     ),
+
+    'csrf'              => function (
+                      ResponseFactoryInterface $responseFactory,
+                      ContainerInterface $container
+                      ) {
+                     $guard = new Guard($responseFactory, persistentTokenMode: true);
+                     $guard->setFailureHandler($container->get(\App\Handlers\CsrfFailureHandler::class));
+                     return $guard;
+                      },
+
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
      */
