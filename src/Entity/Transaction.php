@@ -20,11 +20,12 @@ class Transaction
     private \DateTime $date;
     #[ORM\Column(name: 'amount', type: Types::DECIMAL, precision: 10, scale: 2)]
     private int $amount;
-    #[ORM\Column(name: 'category_id')]
+
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'transactions')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     private Category $category;
-    #[ORM\Column(name: 'user_id')]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'transactions')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private User $user;
     #[ORM\OneToMany(targetEntity: Receipt::class, mappedBy: 'transactions', cascade: ['persist', 'remove'])]
     private Collection $receipts;

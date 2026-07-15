@@ -1,10 +1,14 @@
 {
   "build/auth.css": "/build/auth.0e96676f.css",
-  "build/auth.js": "/build/auth.6be03d4a.js",
-  "build/app.css": "/build/app.14f99ea7.css",
-  "build/app.js": "/build/app.d691cce1.js",
+  "build/auth.js": "/build/auth.98052142.js",
+  "build/app.css": "/build/app.adea7f27.css",
+  "build/app.js": "/build/app.402f6f87.js",
   "build/dashboard.css": "/build/dashboard.a31c809b.css",
-  "build/dashboard.js": "/build/dashboard.c2103f7a.js",
+  "build/dashboard.js": "/build/dashboard.3c34d0da.js",
+  "build/categories.js": "/build/categories.197e6a1b.js",
   "build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js": "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
+  "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_fun-1a0a62.251b2d5e.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_fun-1a0a62.251b2d5e.js",
+  "build/fonts/bootstrap-icons.woff?": "/build/fonts/bootstrap-icons.1295669c.woff",
+  "build/fonts/bootstrap-icons.woff2?": "/build/fonts/bootstrap-icons.92ea18a8.woff2",
   "build/images/logo.png": "/build/images/logo.d391a209.png"
 }
