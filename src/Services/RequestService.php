@@ -16,13 +16,13 @@ class RequestService
         $referer = $request->getHeader('referer')[0] ?? '';
 
         if (! $referer) {
-            return $this->session->get('previousUrl');
+            return $this->session->get('previousUrl')?? '/';
         }
 
         $refererHost = parse_url($referer, PHP_URL_HOST);
 
         if ($refererHost !== $request->getUri()->getHost()) {
-            $referer = $this->session->get('previousUrl');
+            $referer = $this->session->get('previousUrl') ?? '/';
         }
 
         return $referer;

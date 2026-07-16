@@ -25,12 +25,26 @@ class CsrfFailureHandler
 
     public function __invoke(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->session->flash('errors', ['general' => ['Your session expired. Please try again.']]);
+        $message = 'Your session expired. Please try again.';
+
+        if ($this->isAjax($request)) {
+        $response = $this->responseFactory->createResponse(403);
+        $response->getBody()->write(json_encode(['errors' => ['general' => [$message]]]));
+        return $response->withHeader('Content-Type', 'application/json');
+        }
+
+        $this->session->flash('errors', ['general' => [$message]]);
         $response = $this->responseFactory->createResponse();
         $referer  = $this->requestService->getReferer($request);
-       // var_dump($referer);
-        //var_dump($_SESSION['expensepilot_flash']['errors']);
         return $response->withHeader('Location', $referer)->withStatus(302);
 
     }
+
+    private function isAjax(ServerRequestInterface $request): bool
+    {
+        return $request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest'
+            || str_contains($request->getHeaderLine('Accept'), 'application/json')
+            || str_contains($request->getHeaderLine('Content-Type'), 'application/json');
+    }
+
 }

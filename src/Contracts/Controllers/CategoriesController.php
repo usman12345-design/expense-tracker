@@ -6,6 +6,7 @@ namespace App\Contracts\Controllers;
 
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\RequestValidator\CreateCategoryRequestValidator;
+use App\RequestValidator\UpdateCategoryRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -62,5 +63,21 @@ class CategoriesController
         $data = ['id' => $category->getId(), 'name' => $category->getName()];
 
         return $this->responseFormatter->asJson($response, $data);
+    }
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        $data = $this->requestValidatorFactory->make(UpdateCategoryRequestValidator::class)->validate(
+            $args + $request->getParsedBody()
+        );
+
+        $category = $this->categoryService->getById((int) $data['id']);
+
+        if (! $category) {
+            return $response->withStatus(404);
+        }
+
+        $this->categoryService->update($category, $data['name']);
+
+        return $response;
     }
 }
