@@ -31,6 +31,6 @@ class CsrfFailureHandler
        // var_dump($referer);
         //var_dump($_SESSION['expensepilot_flash']['errors']);
         return $response->withHeader('Location', $referer)->withStatus(302);
-        //return $handler->handle($request);
+
     }
 }

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
+use App\Contracts\Controllers\AuthController;
+use App\Contracts\Controllers\CategoriesController;
+use App\Contracts\Controllers\HomeController;
+use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
 use Slim\App;
-use App\Controllers\HomeController;
-use App\Controllers\AuthController;
-use App\Middleware\AuthMiddleware;
-use App\Controllers\CategoriesController;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
@@ -25,5 +25,6 @@ return function (App $app) {
         $categories->get('', [CategoriesController::class, 'index']);
         $categories->post('', [CategoriesController::class, 'store']);
         $categories->delete('/{id}', [CategoriesController::class, 'delete']);
+        $categories->get('/{id}', [CategoriesController::class, 'get']);
     })->add(AuthMiddleware::class);
 };

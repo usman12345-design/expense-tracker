@@ -7,8 +7,11 @@ window.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function (event) {
             const categoryId = event.currentTarget.getAttribute('data-id')
 
-            // TODO: Fetch category info from controller & pass it to this function
-            openEditCategoryModal(editCategoryModal, {id: categoryId, name: ''})
+
+            fetch(`/categories/${ categoryId }`)
+                .then(response => response.json())
+                .then(
+                    response => openEditCategoryModal(editCategoryModal, response))
         })
     })
 
@@ -18,8 +21,8 @@ window.addEventListener('DOMContentLoaded', function () {
         // TODO: Post update to the category
         console.log(categoryId)
     })
-})
 
+});
 function openEditCategoryModal(modal, {id, name}) {
     const nameInput = modal._element.querySelector('input[name="name"]')
 

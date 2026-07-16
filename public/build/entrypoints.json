@@ -5,13 +5,13 @@
         "/build/auth.0e96676f.css"
       ],
       "js": [
-        "/build/auth.98052142.js"
+        "/build/auth.6be03d4a.js"
       ]
     },
     "app": {
       "js": [
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
-        "/build/app.402f6f87.js"
+        "/build/app.d691cce1.js"
       ],
       "css": [
         "/build/app.adea7f27.css"
@@ -22,14 +22,14 @@
         "/build/dashboard.a31c809b.css"
       ],
       "js": [
-        "/build/dashboard.3c34d0da.js"
+        "/build/dashboard.c2103f7a.js"
       ]
     },
     "categories": {
       "js": [
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_fun-1a0a62.251b2d5e.js",
-        "/build/categories.197e6a1b.js"
+        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_fun-4101c3.1dc05025.js",
+        "/build/categories.e0a17bb9.js"
       ]
     }
   }

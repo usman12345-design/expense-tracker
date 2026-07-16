@@ -1,19 +1,18 @@
 <?php
 declare(strict_types = 1);
-namespace App\Controllers;
+namespace App\Contracts\Controllers;
 
 use App\Contracts\AuthInterface;
 use App\Contracts\RequestValidatorFactoryInterface;
+use App\DataObjects\RegisterUserData;
+use App\Exception\ValidationException;
 use App\RequestValidator\RegisterUserRequestValidator;
 use App\RequestValidator\UserLoginRequestValidator;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
-use Slim\Views\Twig;
-use App\Entity\User;
 use Doctrine\ORM\EntityManager;
-use App\Exception\ValidationException;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Views\Twig;
 use Valitron\Validator;
-use App\DataObjects\RegisterUserData;
 
 class AuthController
 {
