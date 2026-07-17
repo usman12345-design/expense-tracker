@@ -15,13 +15,9 @@ class CategoryService
     {
         $category = new Category();
 
-        $category->setName($name);
         $category->setUser($user);
 
-        $this->entityManager->persist($category);
-        $this->entityManager->flush();
-
-        return $category;
+        return $this->update($category, $name);
     }
     public function getAll(): array
     {

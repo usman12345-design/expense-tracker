@@ -1,4 +1,9 @@
 <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
+    {% if errors.general is defined %}
+        <div style="background:red;color:white;padding:10px;">
+            {{ errors.general | first }}
+        </div>
+    {% endif %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
