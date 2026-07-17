@@ -25,14 +25,13 @@ const ajax = (url, method = 'get', data = {}, domElement = null) => {
 
     return fetch(url, options).then(response => {
         if (domElement) {
-           // clearValidationErrors(domElement)
+            clearValidationErrors(domElement)
         }
 
         if (! response.ok) {
             if (response.status === 422) {
                 response.json().then(errors => {
-                   // handleValidationErrors(errors, domElement)
-                    console.log(errors)
+                    handleValidationErrors(errors, domElement)
                 })
             }
         }
@@ -43,6 +42,34 @@ const ajax = (url, method = 'get', data = {}, domElement = null) => {
 const get  = (url, data) => ajax(url, 'get', data)
 const post = (url, data, domElement) => ajax(url, 'post', data, domElement)
 const del = (url, data) => ajax(url, 'delete', data)
+
+
+function handleValidationErrors(errors, domElement) {
+    for (const name in errors) {
+        const element = domElement.querySelector(`input[name="${ name }"]`)
+
+        element.classList.add('is-invalid')
+
+        for (const error of errors[name]) {
+            const errorDiv = document.createElement('div')
+
+            errorDiv.classList.add('invalid-feedback')
+            errorDiv.textContent = error
+
+            element.parentNode.append(errorDiv)
+        }
+    }
+}
+
+function clearValidationErrors(domElement) {
+    domElement.querySelectorAll('.is-invalid').forEach(function(element) {
+        element.classList.remove('is-invalid')
+
+        element.parentNode.querySelectorAll('.invalid-feedback').forEach(function(e) {
+            e.remove()
+        })
+    })
+}
 
 function getCsrfFields() {
     const csrfNameField  = document.querySelector('#csrfName')

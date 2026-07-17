@@ -34,6 +34,14 @@ window.addEventListener('DOMContentLoaded', function () {
         })
     });
 
+    document.querySelector('.delete-category-btn').addEventListener('click', function (event) {
+        const categoryId = event.currentTarget.getAttribute('data-id')
+
+        if (confirm('Are you sure you want to delete this category?')) {
+            del(`/categories/${ categoryId }`)
+        }
+    })
+
 
 });
 function openEditCategoryModal(modal, {id, name}) {
