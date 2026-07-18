@@ -11,10 +11,11 @@
     "app": {
       "js": [
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
-        "/build/app.d691cce1.js"
+        "/build/app.cb92a50f.js"
       ],
       "css": [
-        "/build/app.adea7f27.css"
+        "/build/vendors-node_modules_datatables_net-dt_css_jquery_dataTables_css.e62f97ec.css",
+        "/build/app.722de948.css"
       ]
     },
     "dashboard": {
@@ -28,8 +29,8 @@
     "categories": {
       "js": [
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_filter_js-node_modules_core-js_modules_es_array-510176.40ee6bad.js",
-        "/build/categories.96f0ff09.js"
+        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-ab5eba.a255a79c.js",
+        "/build/categories.f407583d.js"
       ]
     }
   }

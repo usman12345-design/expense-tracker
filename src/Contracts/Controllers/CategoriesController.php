@@ -5,10 +5,12 @@ declare(strict_types = 1);
 namespace App\Contracts\Controllers;
 
 use App\Contracts\RequestValidatorFactoryInterface;
+use App\Entity\Category;
 use App\RequestValidator\CreateCategoryRequestValidator;
 use App\RequestValidator\UpdateCategoryRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
+use App\Services\RequestService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
@@ -19,19 +21,14 @@ class CategoriesController
         private readonly Twig $twig,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly CategoryService $categoryService,
-        private readonly ResponseFormatter $responseFormatter
+        private readonly ResponseFormatter $responseFormatter,
+        private readonly RequestService $requestService
     ) {
     }
 
     public function index(Request $request, Response $response): Response
     {
-        return $this->twig->render(
-            $response,
-            'categories/index.twig',
-            [
-                'categories' => $this->categoryService->getAll(),
-            ]
-        );
+        return $this->twig->render($response, 'categories/index.twig');
     }
 
     public function store(Request $request, Response $response): Response
@@ -80,4 +77,29 @@ class CategoriesController
 
         return $response;
     }
+
+    public function load(Request $request, Response $response): Response
+    {
+        $params      = $this->requestService->getDataTableQueryParameters($request);
+        $categories  = $this->categoryService->getPaginatedCategories($params);
+        $transformer = function (Category $category) {
+            return [
+                'id'        => $category->getId(),
+                'name'      => $category->getName(),
+                'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
+                'updatedAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
+            ];
+        };
+
+        $totalCategories = count($categories);
+
+
+        return $this->responseFormatter->asDataTable(
+            $response,
+            array_map($transformer, (array) $categories->getIterator()),
+            $params->draw,
+            $totalCategories
+        );
+    }
+
 }
