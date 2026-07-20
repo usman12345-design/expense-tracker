@@ -19,7 +19,7 @@ class Transaction
     #[ORM\Column]
     private \DateTime $date;
     #[ORM\Column(name: 'amount', type: Types::DECIMAL, precision: 10, scale: 2)]
-    private int $amount;
+    private float|string $amount;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'transactions')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
@@ -27,7 +27,7 @@ class Transaction
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'transactions')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private User $user;
-    #[ORM\OneToMany(targetEntity: Receipt::class, mappedBy: 'transactions', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Receipt::class, mappedBy: 'transaction', cascade: ['persist', 'remove'])]
     private Collection $receipts;
 
     public function __construct()
@@ -62,7 +62,7 @@ class Transaction
         return $this;
     }
 
-    public function getAmount(): float
+    public function getAmount(): float|string
     {
         return $this->amount;
     }

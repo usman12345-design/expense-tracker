@@ -30,7 +30,14 @@
       "js": [
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
         "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-ab5eba.a255a79c.js",
-        "/build/categories.f407583d.js"
+        "/build/categories.8f1064dc.js"
+      ]
+    },
+    "transactions": {
+      "js": [
+        "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-ab5eba.a255a79c.js",
+        "/build/transactions.85e1bdaf.js"
       ]
     }
   }

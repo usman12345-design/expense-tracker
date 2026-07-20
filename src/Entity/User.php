@@ -25,9 +25,14 @@ class User implements UserInterface
     private \DateTime $createdAt;
     #[ORM\Column(name: 'updated_at')]
     private \DateTime $updatedAt;
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'users', cascade: ['persist', 'remove'])]
+    // User.php
+
+//  FIX: Change mappedBy from 'users' to 'user'
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $categories;
-    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'users', cascade: ['persist', 'remove'])]
+
+//  FIX: Change mappedBy from 'users' to 'user'
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $transactions;
 
     public function __construct()

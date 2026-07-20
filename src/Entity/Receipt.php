@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'receipts')]
 class Receipt
@@ -10,13 +12,17 @@ class Receipt
     #[ORM\Column]
     #[ORM\GeneratedValue]
     private int $id;
-    #[ORM\Column]
-    private string $file_name;
+
+    #[ORM\Column(name: 'file_name', type: 'string', length: 255)]
+    private string $filename;
+
     #[ORM\Column(name: 'created_at')]
     private \DateTime $createdAt;
-    #[ORM\Column(name: 'transaction_id')]
+
     #[ORM\ManyToOne(targetEntity: Transaction::class, inversedBy: 'receipts')]
+    #[ORM\JoinColumn(name: 'transaction_id', referencedColumnName: 'id', nullable: false)]
     private Transaction $transaction;
+
     public function getId(): int
     {
         return $this->id;
@@ -59,6 +65,4 @@ class Receipt
 
         return $this;
     }
-
-
 }

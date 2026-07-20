@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace App\Contracts\Controllers;
+namespace App\Controllers;
 
 use App\Contracts\AuthInterface;
 use App\Contracts\RequestValidatorFactoryInterface;

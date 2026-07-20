@@ -19,6 +19,8 @@ $dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingE
 $migrationCommands = require __DIR__ . '/Configs/command/migration_commands.php';
 $customCommands = require __DIR__ . '/Configs/command/custom_commands.php';
 
+
+
 $cli = new Application('expensepilot', '1.0');
 
 ConsoleRunner::addCommands($cli, new SingleManagerProvider($entityManager));
