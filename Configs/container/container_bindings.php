@@ -9,6 +9,7 @@ use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\SessionInterface;
 use App\Contracts\UserProviderServiceInterface;
 use App\DataObjects\SessionConfig;
+use App\Enums\StorageDriver;
 use App\Enums\AppEnvironment;
 use App\Enums\SameSite;
 use App\RequestValidator\RequestValidatorFactory;
@@ -35,6 +36,8 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use function DI\create;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Csrf\Guard;
+use League\Flysystem\Filesystem;
+
 
 return [
 
@@ -117,6 +120,13 @@ return [
                      return $guard;
                       },
 
+    Filesystem::class => function(Config $config) {
+        $adapter = match($config->get('storage.driver')) {
+            StorageDriver::Local => new League\Flysystem\Local\LocalFilesystemAdapter(STORAGE_PATH),
+        };
+
+        return new League\Flysystem\Filesystem($adapter);
+    },
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
      */

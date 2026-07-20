@@ -5,6 +5,8 @@ import DataTable          from "datatables.net"
 window.addEventListener('DOMContentLoaded', function () {
     const newTransactionModal  = new Modal(document.getElementById('newTransactionModal'))
     const editTransactionModal = new Modal(document.getElementById('editTransactionModal'))
+    const uploadReceiptModalEl  = document.getElementById('uploadReceiptModal')
+    const uploadReceiptModal    = new Modal(uploadReceiptModalEl)
 
     const table = new DataTable('#transactionsTable', {
         serverSide: true,
@@ -34,6 +36,9 @@ window.addEventListener('DOMContentLoaded', function () {
                         <button class="ms-2 btn btn-outline-primary edit-transaction-btn" data-id="${ row.id }">
                             <i class="bi bi-pencil-fill"></i>
                         </button>
+                        <button class="ms-2 btn btn-outline-primary open-receipt-upload-btn" data-id="${ row.id }">
+                            <i class="bi bi-upload"></i>
+                        </button>
                     </div>
                 `
             }
@@ -43,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#transactionsTable').addEventListener('click', function (event) {
         const editBtn   = event.target.closest('.edit-transaction-btn')
         const deleteBtn = event.target.closest('.delete-transaction-btn')
-
+        const uploadReceiptBtn = event.target.closest('.open-receipt-upload-btn')
         if (editBtn) {
             const transactionId = editBtn.getAttribute('data-id')
 
@@ -71,6 +76,14 @@ window.addEventListener('DOMContentLoaded', function () {
                     });
 
             }
+        }else if (uploadReceiptBtn) {
+            const transactionId = uploadReceiptBtn.getAttribute('data-id')
+
+            uploadReceiptModal._element
+                .querySelector('.upload-receipt-btn')
+                .setAttribute('data-id', transactionId)
+
+            uploadReceiptModal.show()
         }
     })
 
@@ -116,6 +129,69 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             })
     })
+    // ADD THIS - event delegation on the modal
+    uploadReceiptModal._element.addEventListener('click', function (event) {
+        const uploadBtn = event.target.closest('.upload-receipt-btn');
+
+        if (uploadBtn) {
+            event.preventDefault();
+            const transactionId = uploadBtn.getAttribute('data-id');
+            const formData = new FormData();
+            const fileInput = uploadReceiptModal._element.querySelector('input[type="file"]');
+            const files = fileInput.files;
+
+            if (files.length === 0) {
+                alert('Please select a file first');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append('receipt', files[i]);
+            }
+
+            console.log('Uploading receipt for transaction:', transactionId); // Debug
+
+            // Debug: Check FormData contents before sending
+            console.log('FormData entries before sending:');
+            for (let pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
+            }
+
+            post(`/transactions/${transactionId}/receipts`, formData, uploadReceiptModal._element)
+                .then(response => {
+                    console.log('Response status:', response.status); // Debug
+                    if (response.ok) {
+                        table.draw();
+                        uploadReceiptModal.hide();
+                        // Clean up backdrop
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Upload error:', error); // Debug
+                });
+        }
+    });
+/*
+    document.querySelector('.upload-receipt-btn').addEventListener('click', function (event) {
+        const transactionId = event.currentTarget.getAttribute('data-id')
+        const formData      = new FormData();
+        const files         = uploadReceiptModal._element.querySelector('input[type="file"]').files;
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append('receipt', files[i]);
+        }
+
+        post(`/transactions/${ transactionId }/receipts`, formData, uploadReceiptModal._element)
+            .then(response => {
+                if (response.ok) {
+                    table.draw()
+                    uploadReceiptModal.hide()
+                }
+            })
+    })*/
 })
 
 function getTransactionFormData(modal) {
