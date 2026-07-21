@@ -1,7 +1,7 @@
 FROM php:8.4-fpm-alpine
 
 # 1. Install system dependencies
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
     git \
     unzip \
     zip \
@@ -15,6 +15,7 @@ RUN apk add --no-cache \
 RUN docker-php-ext-install pdo_mysql mbstring bcmath zip
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
+    && pecl channel-update pecl.php.net \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && apk del .build-deps

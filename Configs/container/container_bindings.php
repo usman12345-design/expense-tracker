@@ -127,6 +127,7 @@ return [
 
         return new League\Flysystem\Filesystem($adapter);
     },
+
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
      */
