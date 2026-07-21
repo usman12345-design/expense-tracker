@@ -15,6 +15,8 @@ class Receipt
 
     #[ORM\Column(name: 'file_name', type: 'string', length: 255)]
     private string $filename;
+    #[ORM\Column(name: 'storage_filename')]
+    private string $storageFilename;
 
     #[ORM\Column(name: 'created_at')]
     private \DateTime $createdAt;
@@ -62,6 +64,17 @@ class Receipt
         $transaction->addReceipt($this);
 
         $this->transaction = $transaction;
+
+        return $this;
+    }
+        public function getStorageFilename(): string
+        {
+            return $this->storageFilename;
+        }
+
+    public function setStorageFilename(string $storageFilename): Receipt
+    {
+        $this->storageFilename = $storageFilename;
 
         return $this;
     }

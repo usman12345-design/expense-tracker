@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\RequestValidator\UploadReceiptRequestValidator;
+use App\Services\ReceiptService;
+use App\Services\TransactionService;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -13,12 +15,13 @@ class ReceiptController
     public function __construct(
         private readonly Filesystem $filesystem,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
-
+        private readonly ReceiptService $receiptService,
+        private readonly TransactionService $transactionService
     ) {
     }
     public function store(Request $request, Response $response, array $args): Response
     {
-        $transactionId = (int) $args['id'];
+        $id = (int) $args['id'];
         // Get uploaded files directly from the request
        // $uploadedFiles = $request->getUploadedFiles();
 
@@ -39,22 +42,30 @@ class ReceiptController
 
         try {
             // Get file info
-            $clientFilename = $uploadedFile->getClientFilename();
+            $filename = $uploadedFile->getClientFilename();
             $stream = $uploadedFile->getStream();
 
+
+            if (! $id || ! ($transaction = $this->transactionService->getById($id))) {
+                return $response->withStatus(404);
+            }
+
             // Generate unique filename
-            $extension = pathinfo($clientFilename, PATHINFO_EXTENSION);
-            $filename = sprintf('%s_%s.%s', $transactionId, uniqid(), $extension);
-            $path = 'receipts/' . $filename;
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $randomFilename = sprintf('%s_%s.%s', $id, uniqid(), $extension);
+            $path = 'receipts/' . $randomFilename;
+
 
             // Store the file
             $this->filesystem->write($path, $stream->getContents());
+            $this->receiptService->create($transaction, $filename, $randomFilename);
 
             $response->getBody()->write(json_encode([
                 'success' => true,
                 'message' => 'File uploaded successfully',
                 'path' => $path
             ]));
+
 
             return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 
