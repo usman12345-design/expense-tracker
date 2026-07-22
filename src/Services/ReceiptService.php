@@ -3,13 +3,22 @@
 declare(strict_types = 1);
 namespace App\Services;
 use App\Entity\Receipt;
+use App\Entity\Transaction;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+
 class ReceiptService
 {
     public function __construct(private readonly EntityManager $entityManager)
     {
     }
-    public function create($transaction, string $filename, string $storageFilename): Receipt
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    public function create(Transaction $transaction, string $filename, string $storageFilename): Receipt
     {
         $receipt = new Receipt();
 

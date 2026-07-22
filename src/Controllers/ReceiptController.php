@@ -6,10 +6,11 @@ use App\Contracts\RequestValidatorFactoryInterface;
 use App\RequestValidator\UploadReceiptRequestValidator;
 use App\Services\ReceiptService;
 use App\Services\TransactionService;
+use Doctrine\ORM\Exception\ORMException;
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\UploadedFileInterface;
 class ReceiptController
 {
     public function __construct(
@@ -75,6 +76,22 @@ class ReceiptController
                 'error' => 'Failed to store file: ' . $e->getMessage()
             ]));
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        } catch (ORMException|FilesystemException $e) {
+            error_log('Error storing file: ' . $e->getMessage());
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
+    }
+    public function download(Request $request, Response $response, array $args): Response
+    {
+        // TODO
+
+        return $response;
+    }
+
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        // TODO
+
+        return $response;
     }
 }
