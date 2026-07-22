@@ -17,6 +17,8 @@ class Receipt
     private string $filename;
     #[ORM\Column(name: 'storage_filename')]
     private string $storageFilename;
+    #[ORM\Column(name: 'media_type')]
+    private string $mediaType;
 
     #[ORM\Column(name: 'created_at')]
     private \DateTime $createdAt;
@@ -76,6 +78,17 @@ class Receipt
     {
         $this->storageFilename = $storageFilename;
 
+        return $this;
+    }
+
+    public function getMediaType(): string
+    {
+        return $this->mediaType;
+    }
+
+    public function setMediaType(string $mediaType): Receipt
+    {
+        $this->mediaType = $mediaType;
         return $this;
     }
 }

@@ -11,6 +11,8 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Psr7\Stream;
+
 class ReceiptController
 {
     public function __construct(
@@ -59,7 +61,7 @@ class ReceiptController
 
             // Store the file
             $this->filesystem->write($path, $stream->getContents());
-            $this->receiptService->create($transaction, $filename, $randomFilename);
+            $this->receiptService->create($transaction, $filename, $randomFilename,$uploadedFile->getClientMediaType());
 
             $response->getBody()->write(json_encode([
                 'success' => true,
@@ -83,9 +85,27 @@ class ReceiptController
     }
     public function download(Request $request, Response $response, array $args): Response
     {
-        // TODO
+        $transactionId = (int) $args['transactionId'];
+        $receiptId     = (int) $args['id'];
 
-        return $response;
+        if (! $transactionId || ! $this->transactionService->getById($transactionId)) {
+            return $response->withStatus(404);
+        }
+
+        if (! $receiptId || ! ($receipt = $this->receiptService->getById($receiptId))) {
+            return $response->withStatus(404);
+        }
+
+        if ($receipt->getTransaction()->getId() !== $transactionId) {
+            return $response->withStatus(401);
+        }
+
+        $file = $this->filesystem->readStream('receipts/' . $receipt->getStorageFilename());
+
+        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $receipt->getFilename() . '"')
+            ->withHeader('Content-Type', $receipt->getMediaType());
+
+        return $response->withBody(new Stream($file));
     }
 
     public function delete(Request $request, Response $response, array $args): Response

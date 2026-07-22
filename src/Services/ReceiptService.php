@@ -18,19 +18,24 @@ class ReceiptService
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function create(Transaction $transaction, string $filename, string $storageFilename): Receipt
+    public function create(Transaction $transaction, string $filename, string $storageFilename,string $mediaType): Receipt
     {
         $receipt = new Receipt();
 
         $receipt->setTransaction($transaction);
         $receipt->setFilename($filename);
         $receipt->setStorageFilename($storageFilename);
+        $receipt->setMediaType($mediaType);
         $receipt->setCreatedAt(new \DateTime());
 
         $this->entityManager->persist($receipt);
         $this->entityManager->flush();
 
         return $receipt;
+    }
+    public function getById(int $id)
+    {
+        return $this->entityManager->find(Receipt::class, $id);
     }
 
 }
