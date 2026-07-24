@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Middleware;
+namespace App\RequestValidator;
 
 use App\Contracts\AuthInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

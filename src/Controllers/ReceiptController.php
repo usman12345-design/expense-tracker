@@ -16,19 +16,21 @@ use Slim\Psr7\Stream;
 class ReceiptController
 {
     public function __construct(
-        private readonly Filesystem $filesystem,
+        private readonly Filesystem                       $filesystem,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
-        private readonly ReceiptService $receiptService,
-        private readonly TransactionService $transactionService
-    ) {
+        private readonly ReceiptService                   $receiptService,
+        private readonly TransactionService               $transactionService
+    )
+    {
     }
+
     public function store(Request $request, Response $response, array $args): Response
     {
-        $id = (int) $args['id'];
+        $id = (int)$args['id'];
         // Get uploaded files directly from the request
-       // $uploadedFiles = $request->getUploadedFiles();
+        // $uploadedFiles = $request->getUploadedFiles();
 
-       $uploadedFiles   = $this->requestValidatorFactory->make(UploadReceiptRequestValidator::class)->validate(
+        $uploadedFiles = $this->requestValidatorFactory->make(UploadReceiptRequestValidator::class)->validate(
             $request->getUploadedFiles()
         );
 
@@ -49,7 +51,7 @@ class ReceiptController
             $stream = $uploadedFile->getStream();
 
 
-            if (! $id || ! ($transaction = $this->transactionService->getById($id))) {
+            if (!$id || !($transaction = $this->transactionService->getById($id))) {
                 return $response->withStatus(404);
             }
 
@@ -61,7 +63,7 @@ class ReceiptController
 
             // Store the file
             $this->filesystem->write($path, $stream->getContents());
-            $this->receiptService->create($transaction, $filename, $randomFilename,$uploadedFile->getClientMediaType());
+            $this->receiptService->create($transaction, $filename, $randomFilename, $uploadedFile->getClientMediaType());
 
             $response->getBody()->write(json_encode([
                 'success' => true,
@@ -83,16 +85,17 @@ class ReceiptController
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
     }
+
     public function download(Request $request, Response $response, array $args): Response
     {
-        $transactionId = (int) $args['transactionId'];
-        $receiptId     = (int) $args['id'];
+        $transactionId = (int)$args['transactionId'];
+        $receiptId = (int)$args['id'];
 
-        if (! $transactionId || ! $this->transactionService->getById($transactionId)) {
+        if (!$transactionId || !$this->transactionService->getById($transactionId)) {
             return $response->withStatus(404);
         }
 
-        if (! $receiptId || ! ($receipt = $this->receiptService->getById($receiptId))) {
+        if (!$receiptId || !($receipt = $this->receiptService->getById($receiptId))) {
             return $response->withStatus(404);
         }
 
@@ -110,7 +113,24 @@ class ReceiptController
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        // TODO
+        $transactionId = (int)$args['transactionId'];
+        $receiptId = (int)$args['id'];
+
+        if (!$transactionId || !$this->transactionService->getById($transactionId)) {
+            return $response->withStatus(404);
+        }
+
+        if (!$receiptId || !($receipt = $this->receiptService->getById($receiptId))) {
+            return $response->withStatus(404);
+        }
+
+        if ($receipt->getTransaction()->getId() !== $transactionId) {
+            return $response->withStatus(401);
+        }
+
+        $this->filesystem->delete('receipts/' . $receipt->getStorageFilename());
+
+        $this->receiptService->delete($receipt);
 
         return $response;
     }
