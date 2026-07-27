@@ -5,12 +5,12 @@ namespace App\Services;
 use App\DataObjects\DataTableQueryParams;
 use App\Entity\Category;
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CategoryService
 {
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
     public function create(string $name, User $user): Category

@@ -6,14 +6,14 @@ use App\DataObjects\DataTableQueryParams;
 use App\DataObjects\TransactionData;
 use App\Entity\Transaction;
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 
 class TransactionService
 {
 
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -76,7 +76,7 @@ class TransactionService
         return $transaction;
     }
 
-    public function getById(int $id): ?Transaction
+    public function getById(int $id): object
     {
         return $this->entityManager->find(Transaction::class, $id);
     }

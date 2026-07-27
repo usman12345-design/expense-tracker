@@ -18,6 +18,7 @@ use App\Session;
 use DI\create;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Psr\Container\ContainerInterface;
 use Slim\App;
@@ -60,7 +61,7 @@ return [
         require CONFIG_PATH . '/app.php'
     ),
 
-    EntityManager::class => function (Config $config) {
+    EntityManagerInterface::class => function (Config $config) {
 
         $connection = DriverManager::getConnection(
             $config->get('doctrine.connection')

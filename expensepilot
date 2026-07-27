@@ -1,5 +1,5 @@
 <?php
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Symfony\Component\Console\Application;
@@ -11,7 +11,7 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 // replace with path to your own project bootstrap file
 
 $container= require __DIR__ . '/bootstrap.php';
-$entityManager = $container->get(EntityManager::class);
+$entityManager = $container->get(EntityManagerInterface::class);
 
 $config = new PhpFile(CONFIG_PATH.'/migrations.php');
 $dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingEntityManager($entityManager));
