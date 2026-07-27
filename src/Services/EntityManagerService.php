@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Services;
+
+use App\Contracts\EntityManagerServiceInterface;
+use App\Entity\Transaction;
+use Doctrine\ORM\EntityManagerInterface;
+
+class EntityManagerService implements EntityManagerServiceInterface
+{
+    public function __construct(protected readonly EntityManagerInterface $entityManager)
+    {
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        if(method_exists($this->entityManager, $name)) {
+            return call_user_func_array([$this->entityManager, $name], $arguments);
+        }
+        throw new \BadMethodCallException("Call to undefined method $this->entityManager::$name()");
+    }
+
+    public function sync($entity = null): void
+    {
+        if($entity) {
+            $this->entityManager->persist($entity);
+        }
+        $this->entityManager->flush();
+    }
+
+    public function delete($entity, bool $sync = false): void
+    {
+        $this->entityManager->remove($entity);
+        if($sync) {
+            $this->sync();
+        }
+    }
+}

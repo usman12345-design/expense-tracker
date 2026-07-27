@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\EntityManagerServiceInterface;
 use App\DataObjects\DataTableQueryParams;
 use App\DataObjects\TransactionData;
 use App\Entity\Transaction;
@@ -12,8 +13,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class TransactionService
 {
-
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerServiceInterface $entityManager)
     {
     }
 
@@ -31,9 +31,6 @@ class TransactionService
         $transaction->setAmount($transactionData->amount);
         $transaction->setDate($transactionData->date);
         $transaction->setCategory($transactionData->category);
-
-        $this->entityManager->persist($transaction);
-        $this->entityManager->flush();
 
         return $transaction;
     }
@@ -65,15 +62,6 @@ class TransactionService
         }
 
         return new Paginator($query);
-    }
-
-    public function delete(int $id)
-    {
-        $transaction = $this->entityManager->find(Transaction::class, $id);
-
-        $this->entityManager->remove($transaction);
-        $this->entityManager->flush();
-        return $transaction;
     }
 
     public function getById(int $id): object

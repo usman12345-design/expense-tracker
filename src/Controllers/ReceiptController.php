@@ -12,6 +12,7 @@ use League\Flysystem\FilesystemException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Stream;
+use App\Contracts\EntityManagerServiceInterface;
 
 class ReceiptController
 {
@@ -19,7 +20,8 @@ class ReceiptController
         private readonly Filesystem                       $filesystem,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly ReceiptService                   $receiptService,
-        private readonly TransactionService               $transactionService
+        private readonly TransactionService               $transactionService,
+        private readonly EntityManagerServiceInterface $entityManagerService
     )
     {
     }
@@ -63,7 +65,8 @@ class ReceiptController
 
             // Store the file
             $this->filesystem->write($path, $stream->getContents());
-            $this->receiptService->create($transaction, $filename, $randomFilename, $uploadedFile->getClientMediaType());
+            $receipt = $this->receiptService->create($transaction, $filename, $randomFilename, $uploadedFile->getClientMediaType());
+            $this->entityManagerService->sync($receipt);
 
             $response->getBody()->write(json_encode([
                 'success' => true,
@@ -130,7 +133,7 @@ class ReceiptController
 
         $this->filesystem->delete('receipts/' . $receipt->getStorageFilename());
 
-        $this->receiptService->delete($receipt);
+        $this->entityManagerService->delete($receipt,true);
 
         return $response;
     }

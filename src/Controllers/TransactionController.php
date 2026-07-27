@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Contracts\EntityManagerServiceInterface;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\DataObjects\TransactionData;
 use App\Entity\Receipt;
@@ -26,7 +27,8 @@ class TransactionController
         private readonly TransactionService $transactionService,
         private readonly ResponseFormatter $responseFormatter,
         private readonly RequestService $requestService,
-        private readonly CategoryService $categoryService
+        private readonly CategoryService $categoryService,
+        private readonly EntityManagerServiceInterface $entityManagerService
     ) {
     }
 
@@ -96,7 +98,7 @@ class TransactionController
             $request->getParsedBody()
         );
 
-        $this->transactionService->create(
+       $transaction = $this->transactionService->create(
             new TransactionData(
                 $data['description'],
                 (float) $data['amount'],
@@ -105,17 +107,19 @@ class TransactionController
             ),
             $request->getAttribute('user')
         );
+        $this->entityManagerService->sync($transaction);
 
         return $response;
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $transaction= $this->transactionService->delete((int) $args['id']);
+        $transaction= $this->transactionService->getById((int) $args['id']);
         if (!$transaction) {
             $response->getBody()->write(json_encode(['success' => false, 'message' => 'Transaction not found']));
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
         }
+        $this->entityManagerService->delete($transaction,true);
 
         $response->getBody()->write(json_encode(['success' => true]));
         return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -152,7 +156,7 @@ class TransactionController
             return $response->withStatus(404);
         }
 
-        $this->transactionService->update(
+        $transaction = $this->transactionService->update(
             $transaction,
             new TransactionData(
                 $data['description'],
@@ -161,6 +165,7 @@ class TransactionController
                 $data['category']
             )
         );
+        $this->entityManagerService->sync($transaction);
 
         return $response;
     }
