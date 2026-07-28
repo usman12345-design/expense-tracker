@@ -40,7 +40,7 @@ use function DI\create;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Csrf\Guard;
 use League\Flysystem\Filesystem;
-
+use App\RouteEntityBindingStrategy;
 
 return [
 
@@ -52,6 +52,13 @@ return [
         $router         = require CONFIG_PATH . '/routes/web.php';
 
         $app = AppFactory::create();
+
+        $app->getRouteCollector()->setDefaultInvocationStrategy(
+            new RouteEntityBindingStrategy(
+                $container->get(EntityManagerServiceInterface::class),
+                $app->getResponseFactory()
+            )
+        );
 
         $router($app);
 

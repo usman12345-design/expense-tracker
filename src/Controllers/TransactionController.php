@@ -112,26 +112,26 @@ class TransactionController
         return $response;
     }
 
-    public function delete(Request $request, Response $response, array $args): Response
+    public function delete(Request $request, Response $response,Transaction $transaction): Response
     {
-        $transaction= $this->transactionService->getById((int) $args['id']);
+       /* $transaction= $this->transactionService->getById((int) $args['id']);
         if (!$transaction) {
             $response->getBody()->write(json_encode(['success' => false, 'message' => 'Transaction not found']));
             return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
-        }
+        }*/
         $this->entityManagerService->delete($transaction,true);
 
         $response->getBody()->write(json_encode(['success' => true]));
         return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
     }
 
-    public function get(Request $request, Response $response, array $args): Response
+    public function get(Request $request, Response $response, Transaction $transaction): Response
     {
-        $transaction = $this->transactionService->getById((int) $args['id']);
+     /*   $transaction = $this->transactionService->getById((int) $args['id']);
 
         if (! $transaction) {
             return $response->withStatus(404);
-        }
+        }*/
 
         $data = [
             'id'          => $transaction->getId(),
@@ -144,17 +144,17 @@ class TransactionController
         return $this->responseFormatter->asJson($response, $data);
     }
 
-    public function update(Request $request, Response $response, array $args): Response
+    public function update(Request $request, Response $response, Transaction $transaction): Response
     {
         $data = $this->requestValidatorFactory->make(TransactionRequestValidator::class)->validate(
-            $args + $request->getParsedBody()
+             $request->getParsedBody()
         );
 
-        $id = (int) $data['id'];
+    /*    $id = (int) $data['id'];
 
         if (! $id || ! ($transaction = $this->transactionService->getById($id))) {
             return $response->withStatus(404);
-        }
+        }*/
 
         $transaction = $this->transactionService->update(
             $transaction,

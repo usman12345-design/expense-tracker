@@ -10,7 +10,7 @@ class HomeController
     {
     }
 
-    public function index(Request $request, Response $response, $args): Response
+    public function index(Request $request, Response $response): Response
     {
         $user = $request->getAttribute('user');
         var_dump($user?->getName());
