@@ -47,4 +47,5 @@ return [
         'dsn'  => $_ENV['MAILER_DSN'],
         'from' => $_ENV['MAILER_FROM'],
     ],
+
 ];

@@ -26,6 +26,7 @@ use Doctrine\ORM\ORMSetup;
 use Psr\Container\ContainerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\Twig;
 use Twig\Extra\Intl\IntlExtension;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
@@ -157,6 +158,7 @@ return [
         return new Mailer($transport);
     },
     BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
+    RouteParserInterface::class             => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
 
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig

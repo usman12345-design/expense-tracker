@@ -81,7 +81,7 @@ class Auth implements AuthInterface
 
         $this->logIn($user);
 
-        $this->signupEmail->send($user->getEmail());
+        $this->signupEmail->send($user);
         return $user;
     }
     public function logIn(UserInterface $user): void

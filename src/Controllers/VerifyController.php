@@ -17,4 +17,10 @@ class VerifyController
         return $this->view->render($response, 'auth/verify.twig');
     }
 
+    public function verify(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+
+        return $response;
+    }
+
 }
