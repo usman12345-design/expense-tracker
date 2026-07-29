@@ -7,15 +7,18 @@ use App\Contracts\UserInterface;
 use App\DataObjects\RegisterUserData;
 use App\Entity\User;
 use App\Contracts\UserProviderServiceInterface;
+use App\Mail\SignupEmail;
 use App\Services\UserProviderService;
+use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 
 class Auth implements AuthInterface
 {
     private ?UserInterface $user = null;
 
     public function __construct(private readonly UserProviderServiceInterface $userProvider,
-                                private readonly SessionInterface $session)
-    {
+                                private readonly SessionInterface $session,
+                                private readonly SignupEmail $signupEmail
+    ){
     }
 
     public function user(): ?UserInterface
@@ -77,6 +80,8 @@ class Auth implements AuthInterface
      $user = $this->userProvider->createUser($data);
 
         $this->logIn($user);
+
+        $this->signupEmail->send($user->getEmail());
         return $user;
     }
     public function logIn(UserInterface $user): void

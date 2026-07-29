@@ -42,6 +42,12 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Csrf\Guard;
 use League\Flysystem\Filesystem;
 use App\RouteEntityBindingStrategy;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\BodyRendererInterface;
+use Symfony\Bridge\Twig\Mime\BodyRenderer;
+
 
 return [
 
@@ -144,6 +150,13 @@ return [
     EntityManagerServiceInterface::class    => fn(EntityManagerInterface $entityManager) => new EntityManagerService(
         $entityManager
     ),
+    MailerInterface::class => function(Config $config) {
+
+        $transport = Transport::fromDsn($config->get('mailer.dsn'));
+
+        return new Mailer($transport);
+    },
+    BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
 
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig

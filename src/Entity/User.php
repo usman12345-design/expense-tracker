@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use App\Contracts\OwnableInterface;
 use App\Contracts\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +22,8 @@ class User implements UserInterface
     private string $password;
     #[ORM\Column(length: 255)]
     private string $name;
+    #[ORM\Column(name: 'verified_at', nullable: true)]
+    private ?\DateTime $verifiedAt;
     #[ORM\Column(name: 'created_at')]
     private \DateTime $createdAt;
     #[ORM\Column(name: 'updated_at')]
@@ -115,6 +118,15 @@ class User implements UserInterface
         $this->transactions->add($transaction);
 
         return $this;
+    }
+    public function canManage(OwnableInterface $entity): bool
+    {
+        return $this->getId() === $entity->getUser()->getId();
+    }
+
+    public function getVerifiedAt(): ?\DateTime
+    {
+        return $this->verifiedAt;
     }
 
 }
