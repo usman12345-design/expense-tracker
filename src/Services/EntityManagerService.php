@@ -35,4 +35,8 @@ class EntityManagerService implements EntityManagerServiceInterface
             $this->sync();
         }
     }
+    public function enableUserAuthFilter(int $userId): void
+    {
+        $this->getFilters()->enable('user')->setParameter('user_id', $userId);
+    }
 }

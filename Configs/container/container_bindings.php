@@ -13,6 +13,7 @@ use App\DataObjects\SessionConfig;
 use App\Enums\StorageDriver;
 use App\Enums\AppEnvironment;
 use App\Enums\SameSite;
+use App\Filters\UserFilter;
 use App\RequestValidator\RequestValidatorFactory;
 use App\Services\EntityManagerService;
 use App\Services\UserProviderService;
@@ -75,13 +76,16 @@ return [
         $connection = DriverManager::getConnection(
             $config->get('doctrine.connection')
         );
+        $ormConfig = ORMSetup::createAttributeMetadataConfiguration(
+            $config->get('doctrine.entity_dir'),
+            $config->get('doctrine.dev_mode')
+        );
+        // Register the filter
+        $ormConfig->addFilter('user', UserFilter::class);
 
         return new EntityManager(
             $connection,
-            ORMSetup::createAttributeMetadataConfiguration(
-                $config->get('doctrine.entity_dir'),
-                $config->get('doctrine.dev_mode')
-            )
+            $ormConfig
         );
     },
 

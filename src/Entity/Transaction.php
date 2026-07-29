@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use App\Contracts\OwnableInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
@@ -8,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'transactions')]
-class Transaction
+class Transaction implements OwnableInterface
 {
     #[ORM\Id]
     #[ORM\Column]
@@ -109,9 +110,4 @@ class Transaction
 
         return $this;
     }
-
-
-
-
-
 }

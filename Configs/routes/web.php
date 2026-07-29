@@ -6,8 +6,8 @@ use App\Controllers\CategoriesController;
 use App\Controllers\HomeController;
 use App\Controllers\ReceiptController;
 use App\Controllers\TransactionController;
+use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
-use App\RequestValidator\AuthMiddleware;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
