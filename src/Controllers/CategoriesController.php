@@ -56,12 +56,6 @@ class CategoriesController
     }
     public function get(Request $request, Response $response, Category $category): Response
     {
-        //$category = $this->categoryService->getById((int) $args['id']);
-
-      /*  if (! $category) {
-            return $response->withStatus(404);
-        }*/
-
         $data = ['id' => $category->getId(), 'name' => $category->getName()];
 
         return $this->responseFormatter->asJson($response, $data);
@@ -71,12 +65,6 @@ class CategoriesController
         $data = $this->requestValidatorFactory->make(UpdateCategoryRequestValidator::class)->validate(
              $request->getParsedBody()
         );
-
-      //  $category = $this->categoryService->getById((int) $data['id']);
-
-       /* if (! $category) {
-            return $response->withStatus(404);
-        }*/
 
         $this->categoryService->update($category, $data['name']);
         $this->entityManagerService->sync($category);
