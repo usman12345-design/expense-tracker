@@ -28,16 +28,24 @@
     },
     "categories": {
       "js": [
+        "/build/vendors-node_modules_core-js_modules_es_array_filter_js-node_modules_core-js_modules_es_array-510176.40ee6bad.js",
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-ab5eba.a255a79c.js",
-        "/build/categories.0605b473.js"
+        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_datatables_net_js_jquery-0b9330.33de23ec.js",
+        "/build/categories.881de847.js"
       ]
     },
     "transactions": {
       "js": [
+        "/build/vendors-node_modules_core-js_modules_es_array_filter_js-node_modules_core-js_modules_es_array-510176.40ee6bad.js",
         "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.a28927d7.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_core-js_modules_es_array-ab5eba.a255a79c.js",
-        "/build/transactions.8078c47c.js"
+        "/build/vendors-node_modules_core-js_modules_es_array_concat_js-node_modules_datatables_net_js_jquery-0b9330.33de23ec.js",
+        "/build/transactions.5cf13831.js"
+      ]
+    },
+    "verify": {
+      "js": [
+        "/build/vendors-node_modules_core-js_modules_es_array_filter_js-node_modules_core-js_modules_es_array-510176.40ee6bad.js",
+        "/build/verify.b6e5be18.js"
       ]
     }
   }

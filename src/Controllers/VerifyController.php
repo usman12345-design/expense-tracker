@@ -13,7 +13,7 @@ class VerifyController
 {
     public function __construct(private readonly Twig $view,
                                 private readonly UserProviderServiceInterface $userProviderService,
-                                //private readonly SignupEmail $signupEmail
+                                private readonly SignupEmail $signupEmail
     ){
     }
     public function index( ResponseInterface $response): ResponseInterface
@@ -36,6 +36,12 @@ class VerifyController
         }
 
         return $response->withHeader('Location', '/')->withStatus(302);
+    }
+    public function resend(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $this->signupEmail->send($request->getAttribute('user'));
+
+        return $response;
     }
 
 }
