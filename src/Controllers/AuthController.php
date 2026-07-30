@@ -5,9 +5,11 @@ namespace App\Controllers;
 use App\Contracts\AuthInterface;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\DataObjects\RegisterUserData;
+use App\Enums\AuthAttemptStatus;
 use App\Exception\ValidationException;
 use App\RequestValidator\RegisterUserRequestValidator;
 use App\RequestValidator\UserLoginRequestValidator;
+use App\ResponseFormatter;
 use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -18,7 +20,8 @@ class AuthController
 {
     public function __construct(private readonly Twig $twig,
                                 private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
-                                private  readonly AuthInterface $auth
+                                private  readonly AuthInterface $auth,
+                                private readonly ResponseFormatter $responseFormatter
     ){
     }
 
@@ -49,17 +52,32 @@ class AuthController
         $data = $this->requestValidatorFactory->make(UserLoginRequestValidator::class)->validate(
             $request->getParsedBody()
         );
+        $status = $this->auth->attemptLogin($data);
 
-        if(! $this->auth->attemptLogin($data)) {
+        if ($status === AuthAttemptStatus::FAILED) {
             throw new ValidationException(['password' => ['You have entered an invalid username or password']]);
         }
 
-        return $response->withHeader('Location', '/')->withStatus(302);
+        if ($status === AuthAttemptStatus::TWO_FACTOR_AUTH) {
+            return $this->responseFormatter->asJson($response, ['two_factor' => true]);
+        }
+
+        return $this->responseFormatter->asJson($response, []);
+
+      /*  if(! $this->auth->attemptLogin($data)) {
+            throw new ValidationException(['password' => ['You have entered an invalid username or password']]);
+        }
+        return $response->withHeader('Location', '/')->withStatus(302);*/
     }
 
     public function logOut(Request $request, Response $response): Response
     {
         $this->auth->logOut();
+        return $response->withHeader('Location', '/')->withStatus(302);
+    }
+    public function  twoFactorLogin(Request $request, Response $response): Response
+    {
+
         return $response->withHeader('Location', '/')->withStatus(302);
     }
 

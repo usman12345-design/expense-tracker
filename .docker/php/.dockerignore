@@ -5,3 +5,4 @@ vendor
 .env
 storage/logs
 storage/cache
+/public/build/

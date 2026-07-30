@@ -7,6 +7,7 @@ use App\Contracts\UserInterface;
 use App\DataObjects\RegisterUserData;
 use App\Entity\User;
 use App\Contracts\UserProviderServiceInterface;
+use App\Enums\AuthAttemptStatus;
 use App\Mail\SignupEmail;
 use App\Services\UserProviderService;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
@@ -43,23 +44,22 @@ class Auth implements AuthInterface
         return $this->user;
     }
 
-    public function attemptLogin( array $data ): bool
+    public function attemptLogin(array $data ):AuthAttemptStatus
     {
         $user = $this->userProvider->getByCredentials($data);
         //$user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
 
         if (!$user || ! $this->checkCredentials($user, $data) ){
-            return false;
+            return AuthAttemptStatus::FAILED;
+        }
+        if($user->hasTwoFactorAuthEnabled()){
+
+            return AuthAttemptStatus::TWO_FACTOR_AUTH;
         }
 
-        //session_regenerate_id();
-       // $_SESSION['user'] = $user->getId();  then
-       // $this->session->regenerate();
-        //$this->session->put('user', $user->getId());
-        //$this->user = $user; then
         $this->logIn($user);
 
-        return true;
+        return AuthAttemptStatus::SUCCESS;
     }
     public function checkCredentials(UserInterface $user, array $credentials): bool
     {

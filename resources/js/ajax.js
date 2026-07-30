@@ -86,6 +86,10 @@ function clearValidationErrors(domElement) {
 function getCsrfFields() {
     const csrfNameField  = document.querySelector('#csrfName')
     const csrfValueField = document.querySelector('#csrfValue')
+    if (!csrfNameField || !csrfValueField) {
+        console.error('CSRF meta tags missing from DOM!')
+        return {}
+    }
     const csrfNameKey    = csrfNameField.getAttribute('name')
     const csrfName       = csrfNameField.content
     const csrfValueKey   = csrfValueField.getAttribute('name')

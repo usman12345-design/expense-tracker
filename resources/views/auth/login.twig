@@ -15,8 +15,7 @@
                                          alt="Expennies Logo" />
                                     Login
                                 </h2>
-                                <form method="post" action="/login">
-                                    {{ csrf.fields | raw }}
+                                <form method="post" action="/login" class="login-form">
                                     {% if errors.general is defined %}
                                         <div style="background:red;color:white;padding:10px;">
                                             {{ errors.general | first }}
@@ -40,7 +39,7 @@
                                     </div>
                                     <p class="mb-4 text-end"><a class="text-secondary fw-semibold" href="#">Forgot
                                             password?</a></p>
-                                    <button class="btn btn-primary bg-gradient text-white btn-lg px-5" type="submit">Log
+                                    <button class="btn btn-primary bg-gradient text-white btn-lg px-5 log-in-btn" type="submit">Log
                                         In
                                     </button>
                                 </form>
@@ -55,5 +54,10 @@
                 </div>
             </div>
         </div>
+        {% include 'auth/two_factor_modal.twig' %}
     </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('auth') }}
 {% endblock %}
