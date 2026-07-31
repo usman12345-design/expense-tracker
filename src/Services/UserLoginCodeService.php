@@ -23,4 +23,34 @@ class UserLoginCodeService
         $this->entityManager->sync($userLoginCode);
         return $userLoginCode;
     }
+
+    public function verify(UserInterface $user, mixed $code): bool
+    {
+        $userLoginCode = $this->entityManager->getRepository(UserLoginCode::class)->findOneBy(
+            ['user' => $user, 'code' => $code, 'isActive' => true]
+        );
+
+        if (! $userLoginCode) {
+            return false;
+        }
+
+        if ($userLoginCode->getExpiration() <= new \DateTime()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function deactivateAllActiveCodes(UserInterface $user)
+    {
+        $this->entityManagerService->getRepository(UserLoginCode::class)
+            ->createQueryBuilder('c')
+            ->update()
+            ->set('c.isActive', '0')
+            ->where('c.user = :user')
+            ->andWhere('c.isActive = 1')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+    }
 }

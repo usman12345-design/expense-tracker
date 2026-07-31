@@ -8,6 +8,7 @@ use App\DataObjects\RegisterUserData;
 use App\Enums\AuthAttemptStatus;
 use App\Exception\ValidationException;
 use App\RequestValidator\RegisterUserRequestValidator;
+use App\RequestValidator\TwoFactorLoginRequestValidator;
 use App\RequestValidator\UserLoginRequestValidator;
 use App\ResponseFormatter;
 use Doctrine\ORM\EntityManager;
@@ -77,8 +78,14 @@ class AuthController
     }
     public function  twoFactorLogin(Request $request, Response $response): Response
     {
+        $data = $this->requestValidatorFactory->make(TwoFactorLoginRequestValidator::class)->validate(
+            $request->getParsedBody()
+        );
+        if (! $this->auth->attemptTwoFactorLogin($data)) {
+            throw new ValidationException(['code' => ['Invalid Code']]);
+        }
 
-        return $response->withHeader('Location', '/')->withStatus(302);
+        return $response;
     }
 
 }

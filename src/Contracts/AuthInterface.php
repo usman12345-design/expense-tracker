@@ -13,4 +13,6 @@ interface AuthInterface
     public function logOut(): void;
     public function register(RegisterUserData $data): UserInterface;
     public function logIn(UserInterface $user): void;
+
+    public function attemptTwoFactorLogin(array $data);
 }
