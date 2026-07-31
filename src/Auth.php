@@ -9,8 +9,11 @@ use App\Entity\User;
 use App\Contracts\UserProviderServiceInterface;
 use App\Enums\AuthAttemptStatus;
 use App\Mail\SignupEmail;
+use App\Mail\TwoFactorAuthEmail;
 use App\Services\UserProviderService;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use App\Services\UserLoginCodeService;
+
 
 class Auth implements AuthInterface
 {
@@ -18,7 +21,9 @@ class Auth implements AuthInterface
 
     public function __construct(private readonly UserProviderServiceInterface $userProvider,
                                 private readonly SessionInterface $session,
-                                private readonly SignupEmail $signupEmail
+                                private readonly SignupEmail $signupEmail,
+                                private readonly TwoFactorAuthEmail $twoFactorAuthEmail,
+                                private readonly UserLoginCodeService $userLoginCodeService
     ){
     }
 
@@ -47,13 +52,13 @@ class Auth implements AuthInterface
     public function attemptLogin(array $data ):AuthAttemptStatus
     {
         $user = $this->userProvider->getByCredentials($data);
-        //$user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
 
         if (!$user || ! $this->checkCredentials($user, $data) ){
             return AuthAttemptStatus::FAILED;
         }
         if($user->hasTwoFactorAuthEnabled()){
 
+            $this->startLoginWith2FA($user);
             return AuthAttemptStatus::TWO_FACTOR_AUTH;
         }
 
@@ -90,5 +95,12 @@ class Auth implements AuthInterface
         $this->session->put('user', $user->getId());
 
         $this->user = $user;
+    }
+    public function startLoginWith2FA(UserInterface $user): void
+    {
+        $this->session->regenerate();
+        $this->session->put('2fa', $user->getId());
+
+        $this->twoFactorAuthEmail->send($this->userLoginCodeService->generate($user));
     }
 }
