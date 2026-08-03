@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Controllers\AuthController;
 use App\Controllers\CategoriesController;
 use App\Controllers\HomeController;
+use App\Controllers\ProfileController;
 use App\Controllers\ReceiptController;
 use App\Controllers\TransactionController;
 use App\Controllers\VerifyController;
@@ -43,6 +44,10 @@ return function (App $app) {
                 '/{transaction}/receipts/{receipt}',
                 [ReceiptController::class, 'delete']
             );
+        });
+        $group->group('/profile', function(RouteCollectorProxy $profile) {
+            $profile->get('', [ProfileController::class, 'index']);
+            $profile->post('', [ProfileController::class, 'update']);
         });
     })->add(VerifyEmailMiddleware::class)->add(AuthMiddleware::class);
 

@@ -43,7 +43,7 @@ class UserLoginCodeService
 
     public function deactivateAllActiveCodes(UserInterface $user)
     {
-        $this->entityManagerService->getRepository(UserLoginCode::class)
+        $this->entityManager->getRepository(UserLoginCode::class)
             ->createQueryBuilder('c')
             ->update()
             ->set('c.isActive', '0')

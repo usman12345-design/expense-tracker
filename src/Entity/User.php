@@ -22,6 +22,8 @@ class User implements UserInterface
     private string $password;
     #[ORM\Column(length: 255)]
     private string $name;
+    #[ORM\Column(name: 'two_factor', options: ['default' => false])]
+    private bool $twoFactor;
     #[ORM\Column(name: 'verified_at', nullable: true)]
     private ?\DateTime $verifiedAt;
     #[ORM\Column(name: 'created_at')]
@@ -42,6 +44,7 @@ class User implements UserInterface
     {
         $this->categories = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+        $this->twoFactor    = false;
     }
 
     #[ORM\PrePersist]
@@ -136,8 +139,13 @@ class User implements UserInterface
     }
     public function hasTwoFactorAuthEnabled(): bool
     {
-        // TODO:
+        return $this->twoFactor;
+    }
 
-        return true;
+    public function setTwoFactor(bool $twoFactor): User
+    {
+        $this->twoFactor = $twoFactor;
+
+        return $this;
     }
 }
