@@ -63,12 +63,9 @@ class AuthController
             return $this->responseFormatter->asJson($response, ['two_factor' => true]);
         }
 
-        return $this->responseFormatter->asJson($response, []);
+        return $this->responseFormatter->asJson($response, ['redirect' => '/']);
 
-      /*  if(! $this->auth->attemptLogin($data)) {
-            throw new ValidationException(['password' => ['You have entered an invalid username or password']]);
-        }
-        return $response->withHeader('Location', '/')->withStatus(302);*/
+        /*return $response->withHeader('Location', '/')->withStatus(302);*/
     }
 
     public function logOut(Request $request, Response $response): Response
