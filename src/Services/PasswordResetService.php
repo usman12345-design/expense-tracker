@@ -4,13 +4,16 @@ namespace App\Services;
 
 use App\Contracts\EntityManagerServiceInterface;
 use App\Contracts\UserInterface;
+use App\Contracts\UserProviderServiceInterface;
 use App\Entity\PasswordReset;
+use App\Entity\User;
 
 
 class PasswordResetService
 {
 
-    public function __construct(private readonly EntityManagerServiceInterface $entityManager)
+    public function __construct(private readonly EntityManagerServiceInterface $entityManager,
+                                private readonly UserProviderServiceInterface $userProviderService)
     {
     }
 
@@ -25,32 +28,15 @@ class PasswordResetService
         return $passwordReset ;
     }
 
-    public function verify(UserInterface $user, mixed $code): bool
+    public function deactivateAllPasswordResets(string $email)
     {
-        $userLoginCode = $this->entityManager->getRepository(UserLoginCode::class)->findOneBy(
-            ['user' => $user, 'code' => $code, 'isActive' => true]
-        );
-
-        if (! $userLoginCode) {
-            return false;
-        }
-
-        if ($userLoginCode->getExpiration() <= new \DateTime()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function deactivateAllActiveCodes(UserInterface $user)
-    {
-        $this->entityManager->getRepository(UserLoginCode::class)
-            ->createQueryBuilder('c')
+        $this->entityManager->getRepository(PasswordReset::class)
+            ->createQueryBuilder('pr')
             ->update()
-            ->set('c.isActive', '0')
-            ->where('c.user = :user')
-            ->andWhere('c.isActive = 1')
-            ->setParameter('user', $user)
+            ->set('pr.isActive', '0')
+            ->where('pr.email = :email')
+            ->andWhere('pr.isActive = 1')
+            ->setParameter('email', $email)
             ->getQuery()
             ->execute();
     }
@@ -70,5 +56,13 @@ class PasswordResetService
             ->getQuery()
             ->getOneOrNullResult();
         
+    }
+    public function updatePassword(User $user, string $password): void
+    {
+        $this->entityManager->wrapInTransaction(function () use ($user, $password) {
+            $this->deactivateAllPasswordResets($user->getEmail());
+
+            $this->userProviderService->updatePassword($user, $password);
+        });
     }
 }
