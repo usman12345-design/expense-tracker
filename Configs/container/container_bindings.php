@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Auth;
+use App\Cache\RedisCache;
 use App\Config;
 use App\Contracts\AuthInterface;
 use App\Contracts\EntityManagerServiceInterface;
@@ -10,11 +11,12 @@ use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\SessionInterface;
 use App\Contracts\UserProviderServiceInterface;
 use App\DataObjects\SessionConfig;
-use App\Enums\StorageDriver;
 use App\Enums\AppEnvironment;
 use App\Enums\SameSite;
+use App\Enums\StorageDriver;
 use App\Filters\UserFilter;
 use App\RequestValidator\RequestValidatorFactory;
+use App\RouteEntityBindingStrategy;
 use App\Services\EntityManagerService;
 use App\Services\UserProviderService;
 use App\Session;
@@ -23,31 +25,32 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use League\Flysystem\Filesystem;
+use Predis\Client;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\SimpleCache\CacheInterface;
 use Slim\App;
+use Slim\Csrf\Guard;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\Twig;
-use Twig\Extra\Intl\IntlExtension;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
-use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
-use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
 use Symfony\Component\DependencyInjection\ServiceLocator;
-use function DI\create;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\Csrf\Guard;
-use League\Flysystem\Filesystem;
-use App\RouteEntityBindingStrategy;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\BodyRendererInterface;
-use Symfony\Bridge\Twig\Mime\BodyRenderer;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollection;
+use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
+use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
+use Twig\Extra\Intl\IntlExtension;
+use function DI\create;
 
 
 return [
@@ -159,6 +162,19 @@ return [
     },
     BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
     RouteParserInterface::class             => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
+
+    Client::class => function (Config $config) {
+        return new Client([
+            'scheme' => 'tcp',
+            'host'   => $config->get('redis.host') ?? 'redis',
+            'port'   => (int) ($config->get('redis.port')?? 6379),
+            'password' => $config->get('redis.password') ?? 'mypassword',
+        ]);
+    },
+    CacheInterface::class => function (Client $redis) {
+        return new RedisCache($redis);
+    },
+
 
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
