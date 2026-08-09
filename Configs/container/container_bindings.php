@@ -53,6 +53,8 @@ use Twig\Extra\Intl\IntlExtension;
 use function DI\create;
 use App\Cache\RedisRateLimiterStorage;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
+use ThomasVantuycom\FlysystemCloudinary\CloudinaryAdapter;
+use Cloudinary\Cloudinary;
 
 
 return [
@@ -147,12 +149,28 @@ return [
                       },
 
     Filesystem::class => function(Config $config) {
+        $cloudinary = function (array $options) {
+            $client = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' =>$options['cloud_name'],
+                    'api_key'    => $options['api_key'],
+                    'api_secret' => $options['api_secret'],
+                ],
+                'url' => [
+                    'secure' => $options['secure'] ?? true,
+                ]
+            ]);
+            return new CloudinaryAdapter($client, null, false, 'expense-pilot');
+        };
         $adapter = match($config->get('storage.driver')) {
             StorageDriver::Local => new League\Flysystem\Local\LocalFilesystemAdapter(STORAGE_PATH),
+            StorageDriver::Cloudinary => $cloudinary($config->get('storage.cloudinary')),
         };
 
         return new League\Flysystem\Filesystem($adapter);
     },
+
+
     EntityManagerServiceInterface::class    => fn(EntityManagerInterface $entityManager) => new EntityManagerService(
         $entityManager
     ),

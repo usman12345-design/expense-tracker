@@ -41,7 +41,13 @@ return [
         'samesite' => 'lax',
     ],
     'storage' => [
-        'driver' => StorageDriver::Local,
+        'driver' => StorageDriver::Cloudinary,
+        'cloudinary' => [
+            'cloud_name' =>  $_ENV['CLOUDINARY_CLOUD_NAME'] ?? '',
+            'api_key'    =>  $_ENV['CLOUDINARY_API_KEY'] ?? '',
+            'api_secret' =>  $_ENV['CLOUDINARY_API_SECRET'] ?? '',
+            'secure'     => true, // Optional: forces HTTPS URLs
+        ],
     ],
     'mailer'                => [
         'dsn'  => $_ENV['MAILER_DSN'],
@@ -58,6 +64,6 @@ return [
         'policy' => 'fixed_window',
         'interval' =>'1 minute',
         'limit' => 6,
-    ]
+    ],
 
 ];

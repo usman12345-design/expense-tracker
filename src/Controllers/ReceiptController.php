@@ -47,7 +47,7 @@ class ReceiptController
 
             // Generate unique filename
             $extension = pathinfo($filename, PATHINFO_EXTENSION);
-            $randomFilename = sprintf('%s_%s', uniqid(), $extension);
+            $randomFilename = sprintf('%s.%s', uniqid(), $extension);
             $path = 'receipts/' . $randomFilename;
 
 

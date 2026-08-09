@@ -28,6 +28,7 @@
     "symfony/twig-bridge": "^7.4",
     "symfony/var-exporter": "^7.4",
     "symfony/webpack-encore-bundle": "^2.3",
+    "thomasvantuycom/flysystem-cloudinary": "^2.0",
     "twig/intl-extra": "^3.26",
     "twig/twig": "^3.28",
     "vlucas/phpdotenv": "^5.6",
