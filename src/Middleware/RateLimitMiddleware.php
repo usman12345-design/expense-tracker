@@ -9,26 +9,31 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
+use Slim\Routing\RouteContext;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 class RateLimitMiddleware implements MiddlewareInterface
 {
     public function __construct(private readonly CacheInterface $cache,
                                 private readonly ResponseFactoryInterface $responseFactory,
                                 private readonly RequestService $requestService,
-                                 private readonly Config $config,)
+                                 private readonly Config $config,
+                                private readonly RateLimiterFactory $rateLimiterFactory,)
     {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $clientIp = $this->requestService->getClientIp($request,$this->config->get('trusted_proxies'));
-        $cacheKey = 'rate_limit_' . $clientIp;
-        $requests = $this->cache->get($cacheKey);
-        if ($requests > 5) {
+
+        $routeContext = RouteContext::fromRequest($request);
+        $route        = $routeContext->getRoute();
+        $limiter      = $this->rateLimiterFactory->create($route->getName() . '_' . $clientIp);
+
+        if ($limiter->consume()->isAccepted() === false) {
             return $this->responseFactory->createResponse(429,'Rate limit exceeded');
         }
 
-        $this->cache->set($cacheKey, $requests +1 ,60);
         return $handler->handle($request);
     }
 }

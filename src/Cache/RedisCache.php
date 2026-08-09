@@ -26,7 +26,7 @@ class RedisCache implements CacheInterface
                 - time();
         }
         if ($ttl !== null) {
-            return (bool) $this->redis->setex($key, $ttl, $value);
+            return (bool) $this->redis->setex($key,  max(1, $ttl), $value);
         }
 
         return (bool) $this->redis->set($key, $value);

@@ -51,6 +51,8 @@ use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
 use Twig\Extra\Intl\IntlExtension;
 use function DI\create;
+use App\Cache\RedisRateLimiterStorage;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 
 return [
@@ -174,7 +176,13 @@ return [
     CacheInterface::class => function (Client $redis) {
         return new RedisCache($redis);
     },
-
+    RateLimiterFactory::class => fn(
+        RedisRateLimiterStorage $storage,
+        Config $config
+    ) => new RateLimiterFactory(
+        $config->get('limiter'),
+        $storage
+    ),
 
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
