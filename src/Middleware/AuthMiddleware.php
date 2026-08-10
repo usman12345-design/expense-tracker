@@ -12,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Views\Twig;
+use Slim\Routing\RouteContext;
 
 class AuthMiddleware implements MiddlewareInterface
 {
@@ -27,6 +28,7 @@ class AuthMiddleware implements MiddlewareInterface
     {
         if ($user = $this->auth->user()) {
             $this->twig->getEnvironment()->addGlobal('auth', ['id' => $user->getId(), 'name' => $user->getName()]);
+            $this->twig->getEnvironment()->addGlobal('current_route', RouteContext::fromRequest($request)->getRoute()->getName());
             $this->entityManagerService->enableUserAuthFilter($user->getId());
             return $handler->handle($request->withAttribute('user', $user));
         }

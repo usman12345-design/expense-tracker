@@ -19,10 +19,10 @@ use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
     $app->group('', function(RouteCollectorProxy $group) {
-        $group->get('/', [HomeController::class, 'index'])->add(AuthMiddleware::class);
+        $group->get('/', [HomeController::class, 'index'])->setName('home');
 
         $group->group('/categories', function (RouteCollectorProxy $categories) {
-            $categories->get('', [CategoriesController::class, 'index']);
+            $categories->get('', [CategoriesController::class, 'index'])->setName('categories');
             $categories->get('/load', [CategoriesController::class, 'load']);
             $categories->post('', [CategoriesController::class, 'store']);
             $categories->delete('/{category}', [CategoriesController::class, 'delete']);
@@ -31,7 +31,7 @@ return function (App $app) {
         });
 
         $group->group('/transactions', function (RouteCollectorProxy $transactions) {
-            $transactions->get('', [TransactionController::class, 'index']);
+            $transactions->get('', [TransactionController::class, 'index'])->setName('transactions');
             $transactions->get('/load', [TransactionController::class, 'load']);
             $transactions->post('', [TransactionController::class, 'store']);
             $transactions->delete('/{transaction}', [TransactionController::class, 'delete']);
