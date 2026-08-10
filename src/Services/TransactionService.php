@@ -68,4 +68,24 @@ class TransactionService
     {
         return $this->entityManager->find(Transaction::class, $id);
     }
+
+    public function getTotals(\DateTime $startDate, \DateTime $endDate)
+    {
+        return ['net' => 1000,'income' => 100,'expense' => 10];
+    }
+
+    public function getRecentTransactions(int $limit)
+    {
+        return [];
+    }
+
+    public function getMonthlySummary(int $year)
+    {
+        return [
+            ['income' => 100, 'expense' => 99 ,'m' => 7],
+            ['income' => 120, 'expense' => 101 ,'m' => 8],
+            ['income' => 130, 'expense' => 102 ,'m' => 9],
+            ['income' => 150, 'expense' => 103 ,'m' => 10]
+            ];
+    }
 }

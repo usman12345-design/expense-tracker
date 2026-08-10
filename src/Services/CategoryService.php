@@ -62,4 +62,9 @@ class CategoryService
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function getTopSpendingCategories(int $int)
+    {
+        return ['ali','ajhxa','ad','ss'];
+    }
 }
