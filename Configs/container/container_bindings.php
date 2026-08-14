@@ -55,6 +55,9 @@ use App\Cache\RedisRateLimiterStorage;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use ThomasVantuycom\FlysystemCloudinary\CloudinaryAdapter;
 use Cloudinary\Cloudinary;
+use DoctrineExtensions\Query\Mysql\DateFormat;
+use DoctrineExtensions\Query\Mysql\Month;
+use DoctrineExtensions\Query\Mysql\Year;
 
 
 return [
@@ -96,6 +99,18 @@ return [
         );
         // Register the filter
         $ormConfig->addFilter('user', UserFilter::class);
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\Year')) {
+            $ormConfig->addCustomDatetimeFunction('YEAR', Year::class);
+        }
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\Month')) {
+            $ormConfig->addCustomDatetimeFunction('MONTH', Month::class);
+        }
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\DateFormat')) {
+            $ormConfig->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
+        }
 
         return new EntityManager(
             $connection,

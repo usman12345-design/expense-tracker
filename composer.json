@@ -8,6 +8,7 @@
     "ext-mbstring": "*",
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
+    "beberlei/doctrineextensions": "dev-master",
     "doctrine/dbal": "^4.4",
     "doctrine/migrations": "^3.9",
     "doctrine/orm": "^3.6",

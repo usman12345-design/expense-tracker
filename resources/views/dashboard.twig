@@ -17,18 +17,18 @@
         <div class="top-container mb-4 row g-0 rounded-4">
             <div class="col-8 border-end border-3">
                 <div class="row text-center">
-                    <div class="col p-4 pb-0 fs-1">{{ "now" | date('M, Y') }}</div>
+                    <div class="col p-2 pb-0 fs-3">{{ "now" | date('M, Y') }}</div>
                 </div>
                 <div class="row justify-content-between text-center">
-                    <div class="col p-4 pb-0 fs-2">
+                    <div class="col p-2 pb-0 fs-5">
                         <div>Expense</div>
                         <div class="fw-bold text-danger">${{ totals.expense | number_format(2) }}</span></div>
                     </div>
-                    <div class="col p-4 pb-0 fs-2">
+                    <div class="col p-2 pb-0 fs-5">
                         <div>Income</div>
                         <div class="fw-bold text-success">${{ totals.income | number_format(2) }}</div>
                     </div>
-                    <div class="col p-4 pb-0 fs-2">
+                    <div class="col p-2 pb-0 fs-5">
                         <div>Net</div>
                         <div class="fw-bold {{ totals.net >= 0 ? 'text-success' : 'text-danger' }}">
                             ${{ totals.net | number_format(2) }}
@@ -37,14 +37,16 @@
                 </div>
                 <div class="row">
                     <div class="col p-4">
-                        <div class="fs-1 text-center mb-2">{{ "now" | date('Y') }} Summary</div>
-                        <canvas id="yearToDateChart"></canvas>
+                        <div class="fs-2 text-center mb-2">{{ "now" | date('Y') }} Summary</div>
+                             <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                                 <canvas id="yearToDateChart"></canvas>
+                             </div>
                     </div>
                 </div>
             </div>
-            <div class="col p-4">
-                <h4>Recent Transactions</h4>
-                <table class="table">
+            <div class="col p-4" style="position: relative;">
+                <h4 >Recent Transactions</h4>
+                <table class="table" >
                     <tbody>
                     {% for transaction in transactions %}
                         <tr>

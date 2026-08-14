@@ -71,21 +71,51 @@ class TransactionService
 
     public function getTotals(\DateTime $startDate, \DateTime $endDate)
     {
-        return ['net' => 1000,'income' => 100,'expense' => 10];
+        // Adjust time boundaries on DateTime objects
+        $start = (clone $startDate)->setTime(0, 0, 0);
+        $end   = (clone $endDate)->setTime(23, 59, 59);
+
+        return $this->entityManager->createQueryBuilder()
+            ->select('
+            SUM(t.amount) AS net,
+            SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS income,
+            SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END) AS expense
+        ')
+            ->from(Transaction::class, 't')
+            ->where('t.date BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getSingleResult();
     }
 
     public function getRecentTransactions(int $limit)
     {
-        return [];
+        return $this->entityManager
+            ->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('t', 'c')
+            ->leftJoin('t.category', 'c')
+            ->orderBy('t.date', 'desc')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function getMonthlySummary(int $year)
     {
-        return [
-            ['income' => 100, 'expense' => 99 ,'m' => 7],
-            ['income' => 120, 'expense' => 101 ,'m' => 8],
-            ['income' => 130, 'expense' => 102 ,'m' => 9],
-            ['income' => 150, 'expense' => 103 ,'m' => 10]
-            ];
+        $query = $this->entityManager->createQuery(
+            'SELECT SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) as income,
+                    SUM(CASE WHEN t.amount < 0 THEN abs(t.amount) ELSE 0 END) as expense, 
+                    MONTH(t.date) as m
+             FROM App\Entity\Transaction t 
+             WHERE YEAR(t.date) = :year 
+             GROUP BY m 
+             ORDER BY m ASC'
+        );
+
+        $query->setParameter('year', $year);
+
+        return $query->getArrayResult();
     }
 }
