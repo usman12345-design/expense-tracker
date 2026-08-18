@@ -1,0 +1,28 @@
+From: support@expensepilot.com
+To: usman@gmail.com
+Subject: Activate your ExpensePilot account
+MIME-Version: 1.0
+Date: Mon, 17 Aug 2026 07:41:25 +0000
+Message-ID: <093215994cede6fe93eac25f7fe9a452@expensepilot.com>
+Content-Type: multipart/alternative; boundary=c7J7DVvz
+
+--c7J7DVvz
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Thank you for signing up to Expense Pilot.
+Please click here to activate =
+your account.
+The link is valid until 08/17/2026 8:11 AM.
+--c7J7DVvz
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Thank you for signing up to Expense Pilot.
+Please <a href=3D"http://local=
+host:8080/verify/1/ef25adffaf4baf8f0ac4479770ef65a79caadb19?expiration=3D17=
+86954285&amp;signature=3D5ef3c1eb1582e3194a18958d4af9865f4540b8b5154ce4a21b=
+f2dedd5f952068" target=3D"_blank">click here</a> to activate your account.=
+
+<br />The link is valid until 08/17/2026 8:11 AM.
+--c7J7DVvz--

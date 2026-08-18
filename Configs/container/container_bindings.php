@@ -191,6 +191,9 @@ return [
     ),
     MailerInterface::class => function(Config $config) {
 
+        if ($config->get('mailer.driver') === 'log') {
+            return new \App\Mailer();
+        }
         $transport = Transport::fromDsn($config->get('mailer.dsn'));
 
         return new Mailer($transport);
@@ -200,7 +203,7 @@ return [
 
     Client::class => function (Config $config) {
         return new Client([
-            'scheme' => 'tcp',
+            'scheme' => $config->get('redis.scheme') ?? 'tcp',
             'host'   => $config->get('redis.host') ?? 'redis',
             'port'   => (int) ($config->get('redis.port')?? 6379),
             'password' => $config->get('redis.password') ?? 'mypassword',

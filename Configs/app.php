@@ -5,7 +5,15 @@ declare(strict_types=1);
 use App\Enums\StorageDriver;
 use App\Enums\AppEnvironment;
 
-$appEnv = $_ENV['APP_ENV'] ?? AppEnvironment::Production->value;
+$boolean = function(mixed $value) {
+    if (in_array($value, ['true', 1, '1', true, 'yes'], true)) {
+        return true;
+    }
+
+    return false;
+};
+
+$appEnv =  !empty($_ENV['APP_ENV']) ?  $_ENV['APP_ENV'] : AppEnvironment::Production->value;
 $appSnakeName = strtolower(str_replace(' ', '_', $_ENV['APP_NAME']));
 
 return [
@@ -31,14 +39,18 @@ return [
             'dbname' => $_ENV['DB_NAME'],
             'user' => $_ENV['DB_USER'],
             'password' => $_ENV['DB_PASS'],
+            'driverOptions' => [
+                PDO::MYSQL_ATTR_SSL_CA                 => true,
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+            ],
         ],
     ],
     'session'               => [
         'name'     => $appSnakeName . '_session',
         'flash_name' => $appSnakeName . '_flash',
-        'secure'   => true,
-        'httponly' => true,
-        'samesite' => 'lax',
+        'secure'   => $boolean($_ENV['SESSION_SECURE'] ?? true),
+        'httponly' =>  $boolean($_ENV['SESSION_HTTP_ONLY'] ?? true),
+        'samesite' =>  $_ENV['SESSION_SAME_SITE'] ?? 'lax',
     ],
     'storage' => [
         'driver' => StorageDriver::Cloudinary,
@@ -50,12 +62,14 @@ return [
         ],
     ],
     'mailer'                => [
-        'dsn'  => $_ENV['MAILER_DSN'],
-        'from' => $_ENV['MAILER_FROM'],
+        'driver' => $_ENV['MAILER_DRIVER'] ?? 'log',
+        'dsn'  => $_ENV['MAILER_DSN'] ?? 'smtp://mailhog:1025',
+        'from'   => trim($_ENV['MAILER_FROM'] ?? '', '"\''),
     ],
     'redis'                  => [
+        'scheme' => $_ENV['REDIS_SCHEME'] ?? 'tcp',
        'host' => $_ENV['REDIS_HOST'],
-        'port' => $_ENV['REDIS_PORT'],
+        'port'     => (int) ($_ENV['REDIS_PORT'] ?? 6379),
         'password' => $_ENV['REDIS_PASSWORD']
     ],
     'trusted_proxies' =>[],

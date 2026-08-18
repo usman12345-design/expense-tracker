@@ -5,8 +5,8 @@ require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/Configs/path_constants.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$dotenv->safeLoad();
 
-$container = require CONFIG_PATH.'/Container/container.php';
+$container = require CONFIG_PATH.'/container/container.php';
 
 return $container;
