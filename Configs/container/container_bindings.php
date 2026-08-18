@@ -97,6 +97,12 @@ return [
             $config->get('doctrine.entity_dir'),
             $config->get('doctrine.dev_mode')
         );
+        $ormConfig->setProxyDir($config->get('doctrine.proxy_dir'));
+
+        $ormConfig->setAutoGenerateProxyClasses(true);
+       // $ormConfig->setAutoGenerateProxyClasses(
+          //  $config->get('doctrine.dev_mode')
+        //);
         // Register the filter
         $ormConfig->addFilter('user', UserFilter::class);
 

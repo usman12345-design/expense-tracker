@@ -31,6 +31,7 @@ return [
     'doctrine' => [
         'dev_mode' => AppEnvironment::isDevelopment($appEnv),
         'cache_dir' => STORAGE_PATH . '/cache/doctrine',
+        'proxy_dir' => STORAGE_PATH . '/cache/doctrine/proxies',
         'entity_dir' => [APP_PATH . '/Entity'],
         'connection' => [
             'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
