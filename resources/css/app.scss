@@ -33,6 +33,45 @@ table.dataTable td {
   color: $text-muted;
 }
 
+// ---- Native UI chrome ---------------------------------------------
+// Tells the browser to paint its own chrome (scrollbars, <select>,
+// date pickers, form-control internals) in dark mode instead of
+// defaulting to a light-theme scrollbar next to a near-black page.
+:root {
+  color-scheme: dark;
+}
+
+// Chromium respects color-scheme for scrollbars too, but its default
+// dark gray doesn't match the panel palette — tune it to fit.
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: $bg-app;
+}
+::-webkit-scrollbar-thumb {
+  background: $bg-panel-alt;
+  border: 1px solid $hairline;
+  border-radius: $border-radius-sm;
+
+  &:hover {
+    background: $hairline;
+  }
+}
+
+::selection {
+  background: $accent-soft;
+  color: $text-primary;
+}
+
+// Bootstrap's .btn-close icon is a dark-gray X meant for a light
+// modal header — invisible against ours. Mirrors what .btn-close-white
+// does, applied globally so none of the 6 modals need an extra class.
+.btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 // ---- Page chrome -------------------------------------------------------
 body {
   background:
@@ -89,19 +128,9 @@ header a.text-dark {
 // consistent without decorating the quiet dark surfaces around it.
 .content-body,
 .card {
-  position: relative;
   background-color: $bg-panel;
   border: 1px solid $hairline;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 1.5rem;
-    right: 1.5rem;
-    height: 2px;
-    background: linear-gradient(90deg, $accent, transparent 75%);
-  }
+  @include bezel(1.5rem);
 }
 
 .content-body {
@@ -238,20 +267,10 @@ table.dataTable {
 }
 
 .auth-card {
-  position: relative;
   background-color: $bg-panel;
   border: 1px solid $hairline;
   border-radius: $border-radius-lg;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 2.5rem;
-    right: 2.5rem;
-    height: 2px;
-    background: linear-gradient(90deg, $accent, transparent 75%);
-  }
+  @include bezel(2.5rem);
 }
 
 .auth-brand {

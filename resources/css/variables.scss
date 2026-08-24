@@ -62,6 +62,11 @@ $border-radius:      .5rem;
 $border-radius-lg:   .75rem;
 $border-radius-sm:   .375rem;
 
+// .fw-bold defaults to 700, which isn't loaded for Inter/JetBrains Mono
+// (see the font link in layout.twig) and would otherwise fall back to
+// browser-synthesized bold. 600 is loaded for every family in use.
+$font-weight-bold: 600;
+
 $card-bg:            $bg-panel;
 $card-border-color:  $hairline;
 $card-cap-bg:        transparent;
@@ -102,3 +107,21 @@ $btn-focus-box-shadow: 0 0 0 .2rem $accent-soft;
 
 $alert-bg-scale: 70%;
 $alert-color-scale: -10%;
+
+// ---- Shared patterns -----------------------------------------------
+// The instrument-bezel: a thin amber top edge that fades out, used by
+// .content-body, .card, and .auth-card. One definition, one place to
+// tune it — the three call sites just set their own inset.
+@mixin bezel($inset: 1.5rem) {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: $inset;
+    right: $inset;
+    height: 2px;
+    background: linear-gradient(90deg, $accent, transparent 75%);
+  }
+}
