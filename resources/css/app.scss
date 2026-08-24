@@ -1,5 +1,43 @@
 @import "variables";
-@import "~bootstrap/scss/bootstrap";
+
+// Bootstrap, imported à la carte. The app only ever uses buttons, cards,
+// dropdowns, modals, alerts, plain (non-collapsing) nav, tables, and
+// forms — confirmed by grepping every view for Bootstrap component
+// classes. `@import "~bootstrap/scss/bootstrap"` compiles all ~30
+// components (accordion, carousel, offcanvas, toasts, tooltips,
+// popovers, navbar, badges, breadcrumbs, pagination, progress bars,
+// spinners, placeholders...) regardless of whether they're used; this
+// list only pulls in what actually ships to the browser. If you start
+// using a component that isn't here (e.g. `.badge` or `.navbar`), add
+// its partial below — Sass will silently no-op unknown classes rather
+// than error, so a missing partial shows up as unstyled markup, not a
+// build failure.
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/variables-dark";
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/utilities";
+
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";       // includes validation — used by .is-invalid
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions"; // fade/collapse animation, used by dropdown + modal
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/nav";         // .nav / .nav-pills — not the heavier .navbar
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/close";       // .btn-close
+@import "~bootstrap/scss/modal";
+
+@import "~bootstrap/scss/utilities/api";
+
 @import "~bootstrap-icons/font/bootstrap-icons";
 @import "~datatables.net-dt/css/jquery.dataTables.css";
 
