@@ -24,4 +24,19 @@ trait HasTimestamps
     {
         $this->updatedAt = new \DateTime();
     }
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
 }
