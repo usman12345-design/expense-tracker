@@ -212,7 +212,7 @@ return [
             'scheme' => $config->get('redis.scheme') ?? 'tcp',
             'host'   => $config->get('redis.host') ?? 'redis',
             'port'   => (int) ($config->get('redis.port')?? 6379),
-            'password' => $config->get('redis.password') ?? 'mypassword',
+            'password' => $config->get('redis.password'),
         ]);
     },
     CacheInterface::class => function (Client $redis) {

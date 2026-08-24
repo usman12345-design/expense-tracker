@@ -72,16 +72,4 @@ class Category implements OwnableInterface
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): Category
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
 }

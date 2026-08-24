@@ -81,7 +81,7 @@ class CategoriesController
                 'id'        => $category->getId(),
                 'name'      => $category->getName(),
                 'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
-                'updatedAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
+                'updatedAt' => $category->getUpdatedAt()->format('m/d/Y g:i A'),
             ];
         };
 

@@ -64,15 +64,14 @@ class ReceiptController
 
 
             return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-
+        } catch (ORMException|FilesystemException $e) {
+            error_log('Error storing file: ' . $e->getMessage());
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         } catch (\Exception $e) {
             error_log('Error storing file: ' . $e->getMessage());
             $response->getBody()->write(json_encode([
                 'error' => 'Failed to store file: ' . $e->getMessage()
             ]));
-            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
-        } catch (ORMException|FilesystemException $e) {
-            error_log('Error storing file: ' . $e->getMessage());
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
     }
