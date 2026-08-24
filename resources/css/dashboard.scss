@@ -1,9 +1,44 @@
+@import "variables";
+
 .top-container {
-  background-color: #FEFEFF;
-  height: 500px;
+  min-height: 500px;
 }
 
+.top-container .border-end {
+  border-color: $hairline !important;
+}
+
+.stat-label {
+  font-family: $font-mono;
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+
+.stat-value {
+  font-variant-numeric: tabular-nums;
+}
+
+// "Top spending categories" — a small readout tile per category, with
+// a corner tick (the same instrument-panel vocabulary as the bezel,
+// scaled down) instead of a second competing accent treatment.
 .category-card {
-  background-color: #FEFEFF;
+  position: relative;
+  background-color: $bg-panel-alt;
+  border: 1px solid $hairline;
+  border-radius: $border-radius;
   height: 150px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: .65rem;
+    right: .65rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $accent;
+    box-shadow: 0 0 8px rgba($accent, .65);
+  }
 }

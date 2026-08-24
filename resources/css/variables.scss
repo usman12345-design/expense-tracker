@@ -1,1 +1,104 @@
-$primary: #018EFC;
+// ============================================================
+// ExpensePilot — "Instrument Panel" theme
+// One place to retheme the whole app. Every color/type choice
+// used elsewhere should trace back to a token defined here.
+// ============================================================
+
+// ---- Palette ---------------------------------------------------
+// Background reads as a cockpit display: cool slate-blue, never
+// pure black. Amber is the single accent — used for the active
+// nav item, primary actions, focus rings and the panel "bezel".
+$bg-app:       #0B0E14;
+$bg-panel:     #12161F; // cards / .content-body surface
+$bg-panel-alt: #171C28; // table headers, input fields, hover rows
+$bg-raised:    #1B2130; // dropdowns, modals, popovers
+
+$hairline:      #262C3A;
+$hairline-soft: #1B202C;
+
+$text-primary:   #E7EAF0;
+$text-secondary: #8A93A6;
+$text-muted:     #5B6273;
+
+$accent:        #F5A623; // instrument amber — the single bold accent
+$accent-strong: #FFC15C;
+$accent-soft:   rgba(245, 166, 35, .14);
+
+$positive: #34D399; // income / net-positive
+$negative: #F87171; // expense / net-negative
+$info:     #5EA8FF;
+
+// ---- Type --------------------------------------------------------
+// Display: Space Grotesk (technical, geometric — carries the
+// "instrument" identity). Body: Inter (UI workhorse). Mono:
+// JetBrains Mono, used for every number so amounts read like
+// gauge readouts with tabular figures.
+$font-display: "Space Grotesk", sans-serif;
+$font-body:    "Inter", sans-serif;
+$font-mono:    "JetBrains Mono", monospace;
+
+// ---- Bootstrap overrides ------------------------------------------
+// These feed Bootstrap's own !default variables, so they must be
+// set before `@import "~bootstrap/scss/bootstrap"` in app.scss.
+$primary:   $accent;
+$secondary: $text-secondary;
+$success:   $positive;
+$danger:    $negative;
+$warning:   $accent;
+$info:      $info;
+$light:     $bg-panel-alt;
+$dark:      $bg-app;
+
+$body-bg:    $bg-app;
+$body-color: $text-primary;
+
+$font-family-sans-serif: $font-body;
+$headings-font-family:   $font-display;
+$headings-font-weight:   600;
+$headings-color:         $text-primary;
+
+$border-color:      $hairline;
+$border-radius:      .5rem;
+$border-radius-lg:   .75rem;
+$border-radius-sm:   .375rem;
+
+$card-bg:            $bg-panel;
+$card-border-color:  $hairline;
+$card-cap-bg:        transparent;
+
+$input-bg:                 $bg-panel-alt;
+$input-color:               $text-primary;
+$input-border-color:        $hairline;
+$input-placeholder-color:   $text-muted;
+$input-focus-bg:            $bg-panel-alt;
+$input-focus-border-color:  $accent;
+$input-focus-color:         $text-primary;
+$input-group-addon-bg:      $bg-panel-alt;
+$input-group-addon-color:   $text-secondary;
+
+$dropdown-bg:             $bg-raised;
+$dropdown-link-color:     $text-primary;
+$dropdown-link-hover-bg:  $bg-panel-alt;
+$dropdown-border-color:   $hairline;
+$dropdown-divider-bg:     $hairline;
+
+$modal-content-bg:            $bg-panel;
+$modal-content-border-color:  $hairline;
+$modal-header-border-color:   $hairline;
+$modal-footer-border-color:   $hairline;
+
+$table-color:        $text-primary;
+$table-bg:            transparent;
+$table-border-color:  $hairline;
+$table-striped-bg:    $bg-panel-alt;
+$table-hover-bg:      $bg-panel-alt;
+
+$nav-pills-link-active-bg: transparent;
+
+$link-color:       $accent;
+$link-hover-color: $accent-strong;
+
+$btn-focus-box-shadow: 0 0 0 .2rem $accent-soft;
+
+$alert-bg-scale: 70%;
+$alert-color-scale: -10%;

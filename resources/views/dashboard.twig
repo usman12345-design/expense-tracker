@@ -17,27 +17,27 @@
         <div class="top-container mb-4 row g-0 rounded-4">
             <div class="col-8 border-end border-3">
                 <div class="row text-center">
-                    <div class="col p-2 pb-0 fs-3">{{ "now" | date('M, Y') }}</div>
+                    <div class="col p-2 pb-0 eyebrow fs-6">{{ "now" | date('M, Y') }}</div>
                 </div>
                 <div class="row justify-content-between text-center">
-                    <div class="col p-2 pb-0 fs-5">
-                        <div>Expense</div>
-                        <div class="fw-bold text-danger">${{ totals.expense | number_format(2) }}</span></div>
+                    <div class="col p-2 pb-0">
+                        <div class="stat-label">Expense</div>
+                        <div class="stat-value fs-5 fw-bold text-danger">${{ totals.expense | number_format(2) }}</div>
                     </div>
-                    <div class="col p-2 pb-0 fs-5">
-                        <div>Income</div>
-                        <div class="fw-bold text-success">${{ totals.income | number_format(2) }}</div>
+                    <div class="col p-2 pb-0">
+                        <div class="stat-label">Income</div>
+                        <div class="stat-value fs-5 fw-bold text-success">${{ totals.income | number_format(2) }}</div>
                     </div>
-                    <div class="col p-2 pb-0 fs-5">
-                        <div>Net</div>
-                        <div class="fw-bold {{ totals.net >= 0 ? 'text-success' : 'text-danger' }}">
+                    <div class="col p-2 pb-0">
+                        <div class="stat-label">Net</div>
+                        <div class="stat-value fs-5 fw-bold {{ totals.net >= 0 ? 'text-success' : 'text-danger' }}">
                             ${{ totals.net | number_format(2) }}
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col p-4">
-                        <div class="fs-2 text-center mb-2">{{ "now" | date('Y') }} Summary</div>
+                        <div class="eyebrow text-center mb-2">{{ "now" | date('Y') }} Summary</div>
                              <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
                                  <canvas id="yearToDateChart"></canvas>
                              </div>
@@ -45,18 +45,18 @@
                 </div>
             </div>
             <div class="col p-4" style="position: relative;">
-                <h4 >Recent Transactions</h4>
+                <h4 class="eyebrow mb-3">Recent Transactions</h4>
                 <table class="table" >
                     <tbody>
                     {% for transaction in transactions %}
                         <tr>
                             <td>{{ transaction.description[0:20] }}</td>
-                            <td class="{{ transaction.amount > 0 ? 'text-success fw-bold' : '' }}">
+                            <td class="stat-value {{ transaction.amount > 0 ? 'text-success fw-bold' : '' }}">
                                 {{ transaction.amount < 0 ? '-' : '' }}${{ transaction.amount | abs | number_format(2) }}
                             </td>
                             <td>
                                 <div>{{ transaction.category ? transaction.category.name : 'N/A' }}</div>
-                                <div>{{ transaction.date | date('m/d/Y') }}</div>
+                                <div class="stat-value text-secondary">{{ transaction.date | date('m/d/Y') }}</div>
                             </td>
                         </tr>
                     {% endfor %}
@@ -69,8 +69,8 @@
                 <div class="col">
                     <div class="category-card p-4 text-center d-flex align-items-center justify-content-center">
                         <div>
-                            <h6 class="fs-6 fw-normal">{{ spendingCategory.name }}</h6>
-                            <h1 class="fs-1 text-danger text-opacity-75">${{ spendingCategory.total }}</h1>
+                            <h6 class="eyebrow">{{ spendingCategory.name }}</h6>
+                            <h1 class="fs-1 stat-value text-danger text-opacity-75">${{ spendingCategory.total }}</h1>
                         </div>
                     </div>
                 </div>

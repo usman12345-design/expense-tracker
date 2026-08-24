@@ -14,24 +14,29 @@ window.addEventListener('DOMContentLoaded', function () {
             incomeData[m - 1]   = income
         })
 
+        const gridColor  = '#262C3A'
+        const labelColor = '#8A93A6'
+
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Dec'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [
                     {
                         label: 'Expense',
                         data: expensesData,
                         borderWidth: 1,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderRadius: 3,
+                        backgroundColor: 'rgba(248, 113, 113, 0.55)',
+                        borderColor: '#F87171',
                     },
                     {
                         label: 'Income',
                         data: incomeData,
                         borderWidth: 1,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderRadius: 3,
+                        backgroundColor: 'rgba(52, 211, 153, 0.55)',
+                        borderColor: '#34D399',
                     }
                 ]
             },
@@ -39,8 +44,19 @@ window.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
+                    x: {
+                        grid: { color: gridColor },
+                        ticks: { color: labelColor, font: { family: 'JetBrains Mono', size: 11 } }
+                    },
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: { color: gridColor },
+                        ticks: { color: labelColor, font: { family: 'JetBrains Mono', size: 11 } }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: labelColor, font: { family: 'Inter' } }
                     }
                 }
             }

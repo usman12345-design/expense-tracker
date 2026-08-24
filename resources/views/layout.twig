@@ -7,7 +7,7 @@
     <title>{% block title %}ExpensePilot{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
@@ -17,7 +17,7 @@
 <body>
 <div class="container">
     {% if errors.general is defined %}
-        <div style="background:red;color:white;padding:10px;">
+        <div class="alert alert-danger">
             {{ errors.general | first }}
         </div>
     {% endif %}
