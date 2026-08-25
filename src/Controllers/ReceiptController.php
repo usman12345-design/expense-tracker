@@ -43,10 +43,20 @@ class ReceiptController
         try {
             // Get file info
             $filename = $uploadedFile->getClientFilename();
+            $mediaType = $uploadedFile->getClientMediaType();
             $stream = $uploadedFile->getStream();
 
+           // Generate extension from the validated MIME type
+            $extension = match ($mediaType) {
+                'image/jpeg' => 'jpg',
+                'image/png'  => 'png',
+                'image/webp' => 'webp',
+                'application/pdf' => 'pdf',
+                default => throw new \RuntimeException('Unsupported receipt MIME type'),
+            };
+
             // Generate unique filename
-            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            //$extension = pathinfo($filename, PATHINFO_EXTENSION);
             $randomFilename = sprintf('%s.%s', uniqid(), $extension);
             $path = 'receipts/' . $randomFilename;
 
