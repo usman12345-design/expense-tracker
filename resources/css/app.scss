@@ -113,7 +113,6 @@ table.dataTable td {
 // ---- Page chrome -------------------------------------------------------
 body {
   background:
-    radial-gradient(1100px 460px at 15% -10%, rgba($accent, .07), transparent 60%),
     $bg-app;
   min-height: 100vh;
 }
@@ -203,6 +202,35 @@ header a.text-dark {
 .form-control:focus,
 .form-select:focus {
   box-shadow: 0 0 0 .2rem $accent-soft;
+}
+
+// Background is fixed by the $body-secondary-bg override above; the text
+// still needs its own treatment so a disabled field reads as "can't
+// edit this" rather than looking identical to an editable one.
+.form-control:disabled {
+  color: $text-secondary;
+  cursor: not-allowed;
+}
+
+.form-label {
+  font-family: $font-mono;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: $text-muted;
+  margin-bottom: .4rem;
+}
+
+.form-check-label {
+  color: $text-secondary;
+  font-size: .9rem;
+}
+
+// Reusable section header — eyebrow label + heading + hairline. Used on
+// profile today; drop it above any other page's main heading for the
+// same treatment instead of hand-rolling a divider per page.
+.page-header {
+  border-bottom: 1px solid $hairline;
 }
 
 .invalid-feedback {
@@ -299,9 +327,7 @@ table.dataTable {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background:
-    radial-gradient(900px 420px at 50% -10%, rgba($accent, .12), transparent 60%),
-    $bg-app;
+  background: $bg-app;
 }
 
 .auth-card {

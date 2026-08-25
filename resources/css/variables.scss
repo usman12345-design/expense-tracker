@@ -52,6 +52,13 @@ $dark:      $bg-app;
 $body-bg:    $bg-app;
 $body-color: $text-primary;
 
+// Drives Bootstrap's --bs-secondary-bg, which .form-control:disabled uses
+// for its background. Left at the default (light gray), the profile
+// page's disabled email field ended up with dark theme text on a near-
+// white background — invisible. This is the one token to change to fix
+// every disabled control, not just that field.
+$body-secondary-bg: $bg-panel-alt;
+
 $font-family-sans-serif: $font-body;
 $headings-font-family:   $font-display;
 $headings-font-weight:   600;
