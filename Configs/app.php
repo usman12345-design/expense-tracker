@@ -15,6 +15,9 @@ $boolean = function(mixed $value) {
 
 $appEnv =  !empty($_ENV['APP_ENV']) ?  $_ENV['APP_ENV'] : AppEnvironment::Production->value;
 $appSnakeName = strtolower(str_replace(' ', '_', $_ENV['APP_NAME']));
+$trustedProxies = !empty($_ENV['TRUSTED_PROXIES'])
+    ? json_decode($_ENV['TRUSTED_PROXIES'], true, 512, JSON_THROW_ON_ERROR)
+    : [];
 
 return [
     'app_key' => $_ENV['APP_KEY'] ?? '',
@@ -73,7 +76,7 @@ return [
         'port'     => (int) ($_ENV['REDIS_PORT'] ?? 6379),
         'password' => $_ENV['REDIS_PASSWORD']
     ],
-    'trusted_proxies' =>[],
+    'trusted_proxies' => $trustedProxies,
     'limiter' => [
         'id' => 'default',
         'policy' => 'fixed_window',

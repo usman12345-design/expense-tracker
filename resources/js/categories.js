@@ -18,9 +18,9 @@ window.addEventListener('DOMContentLoaded', function () {
         ajax: '/categories/load',
         orderMulti: false,
         columns: [
-            {data: "name"},
-            {data: "createdAt"},
-            {data: "updatedAt"},
+            {data: "name", render: DataTable.render.text() },
+            {data: "createdAt", render: DataTable.render.text() },
+            {data: "updatedAt", render: DataTable.render.text() },
             {
                 sortable: false,
                 data: row => `
@@ -51,7 +51,7 @@ window.addEventListener('DOMContentLoaded', function () {
         } else if (deleteBtn) { // 👈 FIXED: Changed from 'else' to 'else if' to prevent null pointer exceptions
             const categoryId = deleteBtn.getAttribute('data-id')
 
-            if (confirm('Are you sure you want to delete this category?')) {
+            if (confirm('Are you sure you want to delete this category and its transactions otherwise first change this category to other in transaction table?')) {
                 del(`/categories/${categoryId}`).then(response => {
                     if (response.ok) {
                         table.ajax.reload(); // 👈 BETTER FOR CLIENT-SIDE: Reloads data array seamlessly

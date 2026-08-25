@@ -42,17 +42,10 @@ class TransactionController
     }
     public function store(Request $request, Response $response): Response
     {
-        $data = $this->requestValidatorFactory->make(TransactionRequestValidator::class)->validate(
-            $request->getParsedBody()
-        );
+        $transactionData = $this->getValidatedTransactionData($request);
 
        $transaction = $this->transactionService->create(
-            new TransactionData(
-                $data['description'],
-                (float) $data['amount'],
-                new DateTime($data['date']),
-                $data['category']
-            ),
+           $transactionData,
             $request->getAttribute('user')
         );
         $this->entityManagerService->sync($transaction);
@@ -84,18 +77,12 @@ class TransactionController
 
     public function update(Request $request, Response $response, Transaction $transaction): Response
     {
-        $data = $this->requestValidatorFactory->make(TransactionRequestValidator::class)->validate(
-             $request->getParsedBody()
-        );
+
+        $transactionData = $this->getValidatedTransactionData($request);
 
         $transaction = $this->transactionService->update(
             $transaction,
-            new TransactionData(
-                $data['description'],
-                (float) $data['amount'],
-                new DateTime($data['date']),
-                $data['category']
-            )
+          $transactionData,
         );
         $this->entityManagerService->sync($transaction);
 
@@ -127,6 +114,19 @@ class TransactionController
             array_map($transformer, (array) $transactions->getIterator()),
             $params->draw,
             $totalTransactions
+        );
+    }
+    private function getValidatedTransactionData(Request $request): TransactionData
+    {
+        $data = $this->requestValidatorFactory
+            ->make(TransactionRequestValidator::class)
+            ->validate($request->getParsedBody());
+
+        return new TransactionData(
+            $data['description'],
+            (float) $data['amount'],
+            new DateTime($data['date']),
+            $data['category']
         );
     }
 }

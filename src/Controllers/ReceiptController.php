@@ -43,10 +43,20 @@ class ReceiptController
         try {
             // Get file info
             $filename = $uploadedFile->getClientFilename();
+            $mediaType = $uploadedFile->getClientMediaType();
             $stream = $uploadedFile->getStream();
 
+           // Generate extension from the validated MIME type
+            $extension = match ($mediaType) {
+                'image/jpeg' => 'jpg',
+                'image/png'  => 'png',
+                'image/webp' => 'webp',
+                'application/pdf' => 'pdf',
+                default => throw new \RuntimeException('Unsupported receipt MIME type'),
+            };
+
             // Generate unique filename
-            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            //$extension = pathinfo($filename, PATHINFO_EXTENSION);
             $randomFilename = sprintf('%s.%s', uniqid(), $extension);
             $path = 'receipts/' . $randomFilename;
 
@@ -64,15 +74,14 @@ class ReceiptController
 
 
             return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-
+        } catch (ORMException|FilesystemException $e) {
+            error_log('Error storing file: ' . $e->getMessage());
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         } catch (\Exception $e) {
             error_log('Error storing file: ' . $e->getMessage());
             $response->getBody()->write(json_encode([
                 'error' => 'Failed to store file: ' . $e->getMessage()
             ]));
-            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
-        } catch (ORMException|FilesystemException $e) {
-            error_log('Error storing file: ' . $e->getMessage());
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
     }

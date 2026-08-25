@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', function () {
         ajax: '/transactions/load',
         orderMulti: false,
         columns: [
-            {data: "description"},
+            {data: "description", render: DataTable.render.text() },
             {
                 data: row => new Intl.NumberFormat(
                     'en-US',
@@ -22,9 +22,9 @@ window.addEventListener('DOMContentLoaded', function () {
                         currency: 'USD',
                         currencySign: 'accounting'
                     }
-                ).format(row.amount)
-            },
-            {data: "category"},
+                ).format(row.amount), render: DataTable.render.text()
+},
+            {data: "category", render: DataTable.render.text() },
             {
                 data: row => {
                     let icons = []
@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', function () {
                     return icons.join('')
                 }
             },
-            {data: "date"},
+            {data: "date", render: DataTable.render.text() },
             {
                 sortable: false,
                 data: row => `
