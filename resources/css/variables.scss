@@ -119,6 +119,13 @@ $btn-focus-box-shadow: 0 0 0 .2rem $accent-soft;
 $alert-bg-scale: 70%;
 $alert-color-scale: -10%;
 
+// We hand-roll a single fixed dark theme rather than using Bootstrap's
+// own [data-bs-theme=dark] attribute-toggle mechanism (nothing sets
+// that attribute). Without this flag, _root.scss still compiles a full
+// second palette under that selector — dead CSS, since it can never
+// match anything in this app.
+$enable-dark-mode: false;
+
 // ---- Shared patterns -----------------------------------------------
 // The instrument-bezel: a thin amber top edge that fades out, used by
 // .content-body, .card, and .auth-card. One definition, one place to
