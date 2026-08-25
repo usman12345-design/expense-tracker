@@ -113,6 +113,11 @@ table.dataTable td {
 // ---- Page chrome -------------------------------------------------------
 body {
   background:
+    radial-gradient(
+            1100px 460px at 15% -10%,
+            rgba($accent, .07),
+            transparent 60%
+    ),
     $bg-app;
   min-height: 100vh;
 }
@@ -188,8 +193,11 @@ header a.text-dark {
   letter-spacing: .01em;
 }
 
-.btn-outline-primary,
-.btn-outline-danger {
+// Muted to a neutral gray-on-hairline so a page full of small icon
+// buttons (edit/upload/etc.) isn't a wall of amber outlines. Danger
+// buttons are deliberately excluded — a delete action should still
+// read as red, not blend in with everything else.
+.btn-outline-primary {
   --bs-btn-color: #{$text-secondary};
   --bs-btn-border-color: #{$hairline};
 

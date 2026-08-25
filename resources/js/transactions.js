@@ -66,7 +66,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 sortable: false,
                 data: row => `
                     <div class="d-flex flex-">
-                        <button type="submit" class="btn btn-outline-primary delete-transaction-btn" data-id="${ row.id }">
+                        <button type="submit" class="btn btn-outline-danger delete-transaction-btn" data-id="${ row.id }">
                             <i class="bi bi-trash3-fill"></i>
                         </button>
                         <button class="ms-2 btn btn-outline-primary edit-transaction-btn" data-id="${ row.id }">

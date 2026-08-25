@@ -57,7 +57,11 @@ $body-color: $text-primary;
 // page's disabled email field ended up with dark theme text on a near-
 // white background — invisible. This is the one token to change to fix
 // every disabled control, not just that field.
+// Same problem, same fix, for --bs-tertiary-bg: it backs the file
+// input's native "Choose file" button (see upload-receipt modal),
+// which was rendering dark theme text on a light gray button.
 $body-secondary-bg: $bg-panel-alt;
+$body-tertiary-bg:  $bg-raised;
 
 $font-family-sans-serif: $font-body;
 $headings-font-family:   $font-display;
