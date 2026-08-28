@@ -12,6 +12,7 @@ use App\Entity\Transaction;
 use App\RequestValidator\TransactionRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
+use App\Services\DashboardCacheService;
 use App\Services\RequestService;
 use App\Services\TransactionService;
 use DateTime;
@@ -28,7 +29,8 @@ class TransactionController
         private readonly ResponseFormatter $responseFormatter,
         private readonly RequestService $requestService,
         private readonly CategoryService $categoryService,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerServiceInterface $entityManagerService,
+        private readonly DashboardCacheService $dashboardCache
     ) {
     }
 
@@ -43,19 +45,24 @@ class TransactionController
     public function store(Request $request, Response $response): Response
     {
         $transactionData = $this->getValidatedTransactionData($request);
+        $user            = $request->getAttribute('user');
 
        $transaction = $this->transactionService->create(
            $transactionData,
-            $request->getAttribute('user')
+            $user
         );
         $this->entityManagerService->sync($transaction);
+        $this->dashboardCache->forget($user->getId());
 
         return $response;
     }
 
     public function delete(Request $request, Response $response,Transaction $transaction): Response
     {
+        $userId = $transaction->getUser()->getId();
+
         $this->entityManagerService->delete($transaction,true);
+        $this->dashboardCache->forget($userId);
 
         $response->getBody()->write(json_encode(['success' => true]));
         return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -85,6 +92,7 @@ class TransactionController
           $transactionData,
         );
         $this->entityManagerService->sync($transaction);
+        $this->dashboardCache->forget($transaction->getUser()->getId());
 
         return $response;
     }

@@ -10,6 +10,7 @@ use App\RequestValidator\CreateCategoryRequestValidator;
 use App\RequestValidator\UpdateCategoryRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
+use App\Services\DashboardCacheService;
 use App\Services\EntityManagerService;
 use App\Services\RequestService;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -25,6 +26,7 @@ class CategoriesController
         private readonly ResponseFormatter $responseFormatter,
         private readonly RequestService $requestService,
         private readonly EntityManagerService $entityManagerService,
+        private readonly DashboardCacheService $dashboardCache,
     ) {
     }
 
@@ -39,6 +41,9 @@ class CategoriesController
             $request->getParsedBody()
         );
 
+        // No dashboard-cache invalidation needed here: a brand-new category
+        // has no transactions yet, so it can't change any cached total.
+
      $category =  $this->categoryService->create($data['name'], $request->getAttribute('user'));
      $this->entityManagerService->sync($category);
 
@@ -48,9 +53,13 @@ class CategoriesController
 
     public function delete(Request $request, Response $response, Category $category): Response
     {
+        // Deleting a category cascades to delete its transactions too
+        // (see Category::$transactions), which changes totals, recent
+        // transactions, and top-spending-categories all at once.
+        $userId = $category->getUser()->getId();
 
-        //$category = $this->categoryService->getById((int) $args['id']);
         $this->entityManagerService->delete($category,true);
+        $this->dashboardCache->forget($userId);
 
         return $response;
     }
@@ -68,6 +77,7 @@ class CategoriesController
 
         $this->categoryService->update($category, $data['name']);
         $this->entityManagerService->sync($category);
+        $this->dashboardCache->forget($category->getUser()->getId());
 
         return $response;
     }
