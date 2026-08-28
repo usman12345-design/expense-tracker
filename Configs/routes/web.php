@@ -84,4 +84,11 @@ return function (App $app) {
         $guest->post('/reset-password/{token}', [PasswordResetController::class, 'resetPassword'])->setName('resetPassword')
             ->add(RateLimitMiddleware::class);
     })->add(GuestMiddleware::class);
+    $app->get('/health', function ($request, $response) {
+        $response->getBody()->write('OK');
+
+        return $response
+            ->withHeader('Content-Type', 'text/plain')
+            ->withStatus(200);
+    });
 };
