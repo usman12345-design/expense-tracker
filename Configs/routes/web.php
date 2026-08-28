@@ -16,6 +16,8 @@ use App\Middleware\ValidateSignatureMiddleware;
 use App\Middleware\VerifyEmailMiddleware;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 return function (App $app) {
     $app->group('', function(RouteCollectorProxy $group) {
@@ -84,7 +86,7 @@ return function (App $app) {
         $guest->post('/reset-password/{token}', [PasswordResetController::class, 'resetPassword'])->setName('resetPassword')
             ->add(RateLimitMiddleware::class);
     })->add(GuestMiddleware::class);
-    $app->get('/health', function ($request, $response) {
+    $app->get('/health', function (Request $request, Response $response) {
         $response->getBody()->write('OK');
 
         return $response
